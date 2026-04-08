@@ -172,8 +172,8 @@ def test_frontmatter_manifest_drives_identity(tmp_path: Path) -> None:
     write_spark_swarm_collective_payload_from_latest(repo_root, runtime_root, load_config(config_path))
 
     payload = json.loads(spark_swarm_collective_payload_path(repo_root).read_text(encoding="utf-8"))
-    assert payload["agentId"] == "agent:loopsmith-lab"
-    assert payload["specialization"]["key"] == "loopsmith-lab"
+    assert payload["agentId"] == "agent:starter-lab"
+    assert payload["specialization"]["key"] == "starter-lab"
     assert payload["specialization"]["label"] == "Loopsmith Lab"
 
 
@@ -221,6 +221,7 @@ def test_write_spark_swarm_collective_payload_from_trading_backtest(tmp_path: Pa
     write_spark_swarm_collective_payload_from_latest(repo_root, runtime_root, load_config(config_path))
 
     payload = json.loads(spark_swarm_collective_payload_path(repo_root).read_text(encoding="utf-8"))
+    assert payload["agentId"] == "agent:starter-lab"
     outcome = payload["outcomes"][0]
     assert outcome["context"]["benchmark"]["benchmarkName"] == "TradingBacktest"
     assert outcome["context"]["benchmark"]["scenarioId"] == "trend-ema-btceth-4h"
@@ -236,6 +237,48 @@ def test_write_spark_swarm_collective_payload_from_trading_backtest(tmp_path: Pa
     assert outcome["benchmarkMetrics"]["requestedAssetUniverse"] == "BTC,ETH"
     assert outcome["benchmarkMetrics"]["tradeCount"] == 35
     assert outcome["benchmarkMetrics"]["paperTradeReadiness"] == 0.024
+
+
+def test_repo_identity_stays_stable_when_manifest_label_changes(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    (repo_root / "AUTORESEARCH.md").write_text(
+        "\n".join(
+            [
+                "---",
+                "schema_version: 1",
+                "repo: vibeforge1111/domain-chip-trading-crypto",
+                "name: Crypto Trading",
+                "run_command: spark-researcher run --command train",
+                "publish_command: spark-researcher collective publish",
+                "---",
+                "",
+                "# AUTORESEARCH",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    config_path = _write_config(repo_root)
+    runtime_root = repo_root
+    row = {
+        "run_id": "20260408-train",
+        "created_at": "2026-04-08T16:00:00+00:00",
+        "command_name": "train",
+        "status": "ok",
+        "metric_name": "score",
+        "metric_value": 0.5,
+        "verdict": "flat",
+    }
+    ledger = ledger_path(runtime_root)
+    ledger.parent.mkdir(parents=True, exist_ok=True)
+    ledger.write_text(json.dumps(row) + "\n", encoding="utf-8")
+
+    write_spark_swarm_collective_payload_from_latest(repo_root, runtime_root, load_config(config_path))
+
+    payload = json.loads(spark_swarm_collective_payload_path(repo_root).read_text(encoding="utf-8"))
+    assert payload["agentId"] == "agent:trading-crypto"
+    assert payload["specialization"]["id"] == "specialization:trading-crypto"
+    assert payload["specialization"]["label"] == "Crypto Trading"
 
 
 def test_run_once_writes_spark_swarm_collective_payload(tmp_path: Path) -> None:

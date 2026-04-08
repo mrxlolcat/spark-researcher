@@ -29,6 +29,13 @@ def _slug(value: str) -> str:
     return normalized or "generalist"
 
 
+def _repo_key(value: str) -> str:
+    repo_name = value.strip().split("/")[-1]
+    if repo_name.startswith("domain-chip-"):
+        repo_name = repo_name[len("domain-chip-") :]
+    return _slug(repo_name)
+
+
 def _parse_frontmatter(raw: str) -> dict[str, Any]:
     lines = raw.splitlines()
     if not lines or lines[0].strip() != "---":
@@ -114,28 +121,31 @@ def _runtime_source(record: dict[str, Any], *, agent_id: str, run_id: str) -> di
 
 def _agent_identity(repo_root: Path) -> tuple[str, str]:
     fields = _manifest_metadata(repo_root)
-    agent_name = (
+    agent_label = (
         str(fields.get("agent.name") or "").strip()
         or str(fields.get("name") or "").strip()
         or os.environ.get("SPARK_SWARM_AGENT_NAME")
         or repo_root.name
     )
-    return f"agent:{_slug(agent_name)}", agent_name
+    repo_value = str(fields.get("repo") or "").strip()
+    agent_key = _repo_key(repo_value) if repo_value else _slug(agent_label)
+    return f"agent:{agent_key}", agent_label
 
 
 def _specialization_descriptor(repo_root: Path) -> dict[str, Any]:
     fields = _manifest_metadata(repo_root)
-    repo_name = (
-        str(fields.get("repo.name") or "").strip()
-        or str(fields.get("name") or "").strip()
+    repo_label = (
+        str(fields.get("name") or "").strip()
+        or str(fields.get("repo.name") or "").strip()
         or str(fields.get("repo") or "").strip().split("/")[-1]
         or repo_root.name
     )
-    key = _slug(repo_name)
+    repo_value = str(fields.get("repo") or "").strip()
+    key = _repo_key(repo_value) if repo_value else _slug(repo_label)
     return {
         "id": f"specialization:{key}",
         "key": key,
-        "label": repo_name,
+        "label": repo_label,
         "memoryPolicy": "selective",
     }
 
