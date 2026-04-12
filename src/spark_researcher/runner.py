@@ -444,6 +444,10 @@ def run_once(
         )
         record["trace_id"] = trace.trace_id
         record["trace_path"] = str(trace.path)
+        if dry_run:
+            record["dry_run"] = True
+            trace.finish(status="ok", attributes={"mode": "dry_run", "verdict": verdict, "metric_value": numeric_metric})
+            return record
         with trace.span("persist_record", attributes={"verdict": verdict, "metric_value": numeric_metric}):
             ensure_parent(run_dir / "result.json")
             (run_dir / "result.json").write_text(json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8")

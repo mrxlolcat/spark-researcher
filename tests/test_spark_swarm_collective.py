@@ -411,6 +411,21 @@ def test_run_once_writes_spark_swarm_collective_payload(tmp_path: Path) -> None:
     assert "benchmarkMetrics" not in payload["outcomes"][0]
 
 
+def test_run_once_dry_run_does_not_persist_ledger_or_swarm_payload(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    _write_manifest(repo_root)
+    (repo_root / "train.py").write_text("print('score=1.5')\n", encoding="utf-8")
+    config_path = _write_config(repo_root)
+    runtime_root = resolve_runtime_root(config_path)
+
+    record = run_once(config_path, "train", dry_run=True)
+
+    assert record["status"] == "ok"
+    assert record["dry_run"] is True
+    assert not ledger_path(runtime_root).exists()
+    assert not spark_swarm_collective_payload_path(repo_root).exists()
+
+
 def test_collective_readiness_tracks_latest_payload_and_capsule(tmp_path: Path, monkeypatch) -> None:
     repo_root = tmp_path
     _write_frontmatter_manifest(repo_root)
