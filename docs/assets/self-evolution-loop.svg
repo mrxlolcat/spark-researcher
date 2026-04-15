@@ -1,88 +1,134 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
-  <title id="title">Spark Researcher Self-Evolution Loop</title>
-  <desc id="desc">A bounded self-evolution loop showing config, run, metric, memory, suggestions, self-edit proposal, human review, and apply or reject.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="960" viewBox="0 0 1280 960" role="img" aria-labelledby="title desc" font-family="'Sora', -apple-system, BlinkMacSystemFont, sans-serif">
+  <title id="title">Spark Bounded Self-Evolution Loop</title>
+  <desc id="desc">Eight stages of bounded self-evolution: project spec, run, metric and ledger, memory and watchtower, suggest candidates, self-edit propose, human review, then apply or reject.</desc>
+
+  <rect width="1280" height="960" fill="#0E1018"/>
+
   <defs>
-    <style>
-      .bg { fill: #fcfcfb; }
-      .title { font: 700 34px 'Segoe UI', Arial, sans-serif; fill: #111111; }
-      .subtitle { font: 400 18px 'Segoe UI', Arial, sans-serif; fill: #4b5563; }
-      .box { fill: #ffffff; stroke: #111111; stroke-width: 2.5; rx: 18; ry: 18; }
-      .accent { fill: #fff3e8; stroke: #d97706; stroke-width: 2.5; rx: 18; ry: 18; }
-      .review { fill: #eef6ff; stroke: #2563eb; stroke-width: 2.5; rx: 18; ry: 18; }
-      .label { font: 700 20px 'Segoe UI', Arial, sans-serif; fill: #111111; }
-      .body { font: 400 15px 'Segoe UI', Arial, sans-serif; fill: #374151; }
-      .note { font: 700 16px 'Segoe UI', Arial, sans-serif; fill: #b45309; }
-      .arrow { stroke: #111111; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
-      .soft { stroke: #6b7280; stroke-width: 2.5; fill: none; marker-end: url(#arrowheadSoft); }
-    </style>
-    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-      <path d="M0,0 L10,5 L0,10 z" fill="#111111"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,2 L9,5 L0,8 z" fill="#7A82A8"/>
     </marker>
-    <marker id="arrowheadSoft" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    <marker id="arr-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,2 L9,5 L0,8 z" fill="#5CC2B4"/>
     </marker>
   </defs>
 
-  <rect class="bg" x="0" y="0" width="1200" height="760"/>
-  <text class="title" x="60" y="70">Bounded Self-Evolution Loop</text>
-  <text class="subtitle" x="60" y="105">Spark can improve a system step by step, but only through explicit scoring, visible artifacts, and reviewable apply paths.</text>
+  <!-- Header -->
+  <text x="64" y="80" fill="#F4F2EE" font-size="32" font-weight="600" letter-spacing="-0.3">Bounded self-evolution loop</text>
+  <text x="64" y="112" fill="#D6D9E8" font-size="17" font-weight="400">Spark improves a system step by step — through explicit scoring, visible artifacts, and reviewable apply paths.</text>
 
-  <rect class="box" x="60" y="150" width="220" height="96"/>
-  <text class="label" x="90" y="188">1. Project Spec</text>
-  <text class="body" x="90" y="214">Config, commands, metric,</text>
-  <text class="body" x="90" y="236">mutable fields, chip path.</text>
+  <text x="64" y="145" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="500" letter-spacing="0.5">
+    <tspan fill="#506070">/</tspan><tspan fill="#5CC2B4">spark</tspan><tspan fill="#506070"> · </tspan><tspan fill="#D6D9E8">loop</tspan>
+  </text>
 
-  <rect class="box" x="340" y="150" width="220" height="96"/>
-  <text class="label" x="370" y="188">2. Run Or Autoloop</text>
-  <text class="body" x="370" y="214">Execute one bounded trial</text>
-  <text class="body" x="370" y="236">or a small set of trials.</text>
+  <!-- ============== ROW 1: stages 1-4 (y=200..330, 130 tall) ============== -->
+  <g>
+    <rect x="64" y="200" width="250" height="130" rx="6" fill="#141820" stroke="#222430" stroke-width="1"/>
+    <text x="84" y="232" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="500" letter-spacing="0.8" fill="#5CC2B4">01</text>
+    <text x="84" y="266" fill="#F4F2EE" font-size="17" font-weight="600">Project spec</text>
+    <text x="84" y="294" fill="#D6D9E8" font-size="14">Config, commands, metric,</text>
+    <text x="84" y="314" fill="#D6D9E8" font-size="14">mutables, chip path</text>
+  </g>
 
-  <rect class="accent" x="620" y="150" width="220" height="96"/>
-  <text class="label" x="650" y="188">3. Metric + Ledger</text>
-  <text class="body" x="650" y="214">Parse one score and append</text>
-  <text class="body" x="650" y="236">an immutable result row.</text>
+  <g>
+    <rect x="344" y="200" width="250" height="130" rx="6" fill="#141820" stroke="#222430" stroke-width="1"/>
+    <text x="364" y="232" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="500" letter-spacing="0.8" fill="#5CC2B4">02</text>
+    <text x="364" y="266" fill="#F4F2EE" font-size="17" font-weight="600">Run / autoloop</text>
+    <text x="364" y="294" fill="#D6D9E8" font-size="14">Execute one bounded trial</text>
+    <text x="364" y="314" fill="#D6D9E8" font-size="14">or a small set of trials</text>
+  </g>
 
-  <rect class="box" x="900" y="150" width="240" height="96"/>
-  <text class="label" x="930" y="188">4. Memory + Watchtower</text>
-  <text class="body" x="930" y="214">Sync packets, update memory,</text>
-  <text class="body" x="930" y="236">rebuild Obsidian views.</text>
+  <g>
+    <rect x="624" y="200" width="250" height="130" rx="6" fill="#1A1E28" stroke="#5CC2B4" stroke-width="1.5"/>
+    <text x="644" y="232" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="500" letter-spacing="0.8" fill="#5CC2B4">03</text>
+    <text x="644" y="266" fill="#F4F2EE" font-size="17" font-weight="600">Metric + ledger</text>
+    <text x="644" y="294" fill="#D6D9E8" font-size="14">Parse one score, append</text>
+    <text x="644" y="314" fill="#D6D9E8" font-size="14">an immutable result row</text>
+  </g>
 
-  <rect class="box" x="140" y="340" width="250" height="104"/>
-  <text class="label" x="172" y="380">5. Suggest Next Candidates</text>
-  <text class="body" x="172" y="406">Kernel or chip proposes the next</text>
-  <text class="body" x="172" y="428">bounded mutations to test.</text>
+  <g>
+    <rect x="904" y="200" width="280" height="130" rx="6" fill="#141820" stroke="#222430" stroke-width="1"/>
+    <text x="924" y="232" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="500" letter-spacing="0.8" fill="#5CC2B4">04</text>
+    <text x="924" y="266" fill="#F4F2EE" font-size="17" font-weight="600">Memory + watchtower</text>
+    <text x="924" y="294" fill="#D6D9E8" font-size="14">Sync packets, update memory,</text>
+    <text x="924" y="314" fill="#D6D9E8" font-size="14">rebuild Obsidian views</text>
+  </g>
 
-  <rect class="accent" x="470" y="330" width="260" height="124"/>
-  <text class="label" x="500" y="372">6. Self-Edit Propose</text>
-  <text class="body" x="500" y="398">External coding agent works in</text>
-  <text class="body" x="500" y="420">a copied workspace, never the</text>
-  <text class="body" x="500" y="442">live repo directly.</text>
+  <!-- Horizontal arrows row 1 -->
+  <line x1="314" y1="265" x2="344" y2="265" stroke="#7A82A8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="594" y1="265" x2="624" y2="265" stroke="#7A82A8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="874" y1="265" x2="904" y2="265" stroke="#7A82A8" stroke-width="1.5" marker-end="url(#arr)"/>
 
-  <rect class="review" x="820" y="330" width="260" height="124"/>
-  <text class="label" x="850" y="372">7. Human Review</text>
-  <text class="body" x="850" y="398">Inspect metric movement, diff,</text>
-  <text class="body" x="850" y="420">logs, allowed paths, and packet</text>
-  <text class="body" x="850" y="442">truthfulness before apply.</text>
+  <!-- WRAP-AROUND: card 4 right edge -> down right margin -> left to above card 5 -> down into card 5 top.
+       Path stays in clear margins. Card 5 top is y=480 at x=64..314, enter at x=189 (center). -->
+  <path d="M 1184 265 L 1230 265 L 1230 410 L 189 410 L 189 480"
+        fill="none" stroke="#7A82A8" stroke-width="1.5" marker-end="url(#arr)"/>
 
-  <rect class="box" x="250" y="560" width="250" height="96"/>
-  <text class="label" x="282" y="598">Reject</text>
-  <text class="body" x="282" y="624">Nothing mutates in the repo.</text>
+  <!-- ============== ROW 2: stages 5-7 (y=480..610, 130 tall) ============== -->
+  <g>
+    <rect x="64" y="480" width="250" height="130" rx="6" fill="#141820" stroke="#222430" stroke-width="1"/>
+    <text x="84" y="512" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="500" letter-spacing="0.8" fill="#5CC2B4">05</text>
+    <text x="84" y="546" fill="#F4F2EE" font-size="17" font-weight="600">Suggest candidates</text>
+    <text x="84" y="574" fill="#D6D9E8" font-size="14">Kernel or chip proposes</text>
+    <text x="84" y="594" fill="#D6D9E8" font-size="14">next bounded mutations</text>
+  </g>
 
-  <rect class="accent" x="700" y="560" width="250" height="96"/>
-  <text class="label" x="732" y="598">Apply</text>
-  <text class="body" x="732" y="624">Copy only allowed files back,</text>
-  <text class="body" x="732" y="646">optionally commit and push.</text>
+  <g>
+    <rect x="514" y="480" width="280" height="130" rx="6" fill="#1A1E28" stroke="#5CC2B4" stroke-width="1.5"/>
+    <text x="534" y="512" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="500" letter-spacing="0.8" fill="#5CC2B4">06</text>
+    <text x="534" y="546" fill="#F4F2EE" font-size="17" font-weight="600">Self-edit propose</text>
+    <text x="534" y="574" fill="#D6D9E8" font-size="14">Coding agent works in a</text>
+    <text x="534" y="594" fill="#D6D9E8" font-size="14">copied workspace, never live</text>
+  </g>
 
-  <path class="arrow" d="M280 198 H340"/>
-  <path class="arrow" d="M560 198 H620"/>
-  <path class="arrow" d="M840 198 H900"/>
-  <path class="arrow" d="M1020 246 V292 H600 V330"/>
-  <path class="arrow" d="M470 392 H390"/>
-  <path class="arrow" d="M730 392 H820"/>
-  <path class="arrow" d="M950 454 V560"/>
-  <path class="soft" d="M820 392 H730"/>
-  <path class="soft" d="M600 454 V514 H375 V560"/>
-  <path class="soft" d="M825 608 H1010 V292 H265 V340"/>
+  <g>
+    <rect x="934" y="480" width="280" height="130" rx="6" fill="#1A1E28" stroke="#D8C868" stroke-width="1.5"/>
+    <text x="954" y="512" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="500" letter-spacing="0.8" fill="#D8C868">07</text>
+    <text x="954" y="546" fill="#F4F2EE" font-size="17" font-weight="600">Human review</text>
+    <text x="954" y="574" fill="#D6D9E8" font-size="14">Inspect diff, logs, paths,</text>
+    <text x="954" y="594" fill="#D6D9E8" font-size="14">packet truthfulness</text>
+  </g>
 
-  <text class="note" x="60" y="710">Key constraint: Spark evolves through proposals and measured outcomes, not silent autonomous edits.</text>
+  <!-- Row 2 horizontal arrows -->
+  <line x1="314" y1="545" x2="514" y2="545" stroke="#7A82A8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="794" y1="545" x2="934" y2="545" stroke="#7A82A8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ============== ROW 3: branches from human review (y=750..870) ==============
+       Branch routing in the gap between rows (y=610..750). -->
+  <!-- Reject branch label + path -->
+  <path d="M 1010 610 L 1010 680 L 350 680 L 350 750"
+        fill="none" stroke="#7A82A8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="1018" y="672" fill="#E08878" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="500" letter-spacing="0.8">REJECT</text>
+
+  <!-- Apply branch -->
+  <path d="M 1140 610 L 1140 750"
+        fill="none" stroke="#5CC2B4" stroke-width="1.5" marker-end="url(#arr-teal)"/>
+  <text x="1150" y="672" fill="#5CC2B4" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="500" letter-spacing="0.8">APPLY</text>
+
+  <!-- Reject card -->
+  <g>
+    <rect x="200" y="750" width="300" height="120" rx="6" fill="#141820" stroke="#222430" stroke-width="1"/>
+    <text x="220" y="788" fill="#F4F2EE" font-size="17" font-weight="600">Reject</text>
+    <text x="220" y="818" fill="#D6D9E8" font-size="14">Nothing mutates in the repo.</text>
+    <text x="220" y="840" fill="#D6D9E8" font-size="14">Feedback returns to suggest.</text>
+  </g>
+
+  <!-- Apply card -->
+  <g>
+    <rect x="980" y="750" width="300" height="120" rx="6" fill="#1A1E28" stroke="#5CC2B4" stroke-width="1.5"/>
+    <text x="1000" y="788" fill="#F4F2EE" font-size="17" font-weight="600">Apply</text>
+    <text x="1000" y="818" fill="#D6D9E8" font-size="14">Copy only allowed files back,</text>
+    <text x="1000" y="840" fill="#D6D9E8" font-size="14">optionally commit and push.</text>
+  </g>
+
+  <!-- Reject feedback loop, dashed, around far left -->
+  <path d="M 200 810 L 30 810 L 30 545 L 64 545"
+        fill="none" stroke="#5A6080" stroke-width="1" stroke-dasharray="4 4" marker-end="url(#arr)"/>
+
+  <!-- Footer -->
+  <g>
+    <rect x="64" y="900" width="1152" height="44" rx="6" fill="#141820" stroke="#5CC2B4" stroke-width="1" stroke-opacity="0.35"/>
+    <text x="84" y="928" fill="#5CC2B4" font-size="14" font-weight="600">Key constraint</text>
+    <text x="220" y="928" fill="#D6D9E8" font-size="14">Spark evolves through proposals and measured outcomes — never silent autonomous edits.</text>
+  </g>
 </svg>
