@@ -24,7 +24,7 @@ If the chip repo already has generated run state or local drift, clone a fresh c
 From the chip repo root:
 
 ```powershell
-$env:PYTHONPATH='C:\Users\USER\Desktop\spark-researcher\src;src'
+$env:PYTHONPATH='..\spark-researcher\src;src'
 python -m spark_researcher.cli chips validate
 python -m spark_researcher.cli autoloop --command research
 python -m spark_researcher.cli memory sync

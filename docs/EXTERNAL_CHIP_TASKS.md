@@ -4,7 +4,7 @@ This file tracks the remaining work to make Spark treat domain chips as external
 
 ## Completed
 
-- default `chips init` to `C:\Users\USER\Desktop\domain-chip-<domain>`
+- default `chips init` to `$env:USERPROFILE\Desktop\domain-chip-<domain>`
 - normalize omitted or unprefixed chip names to `domain-chip-<domain>`
 - resolve relative chip paths under Desktop instead of under `spark-researcher`
 - refuse chip targets inside `spark-researcher`

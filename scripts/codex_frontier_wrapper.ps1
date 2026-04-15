@@ -18,7 +18,16 @@ $codexCommand = if ($env:SPARK_RESEARCHER_CODEX_EXECUTABLE) {
 }
 else {
   $cmd = Get-Command codex -ErrorAction SilentlyContinue
-  if ($cmd) { $cmd.Source } else { "C:\Users\USER\.npm-global\codex.cmd" }
+  if ($cmd) {
+    $cmd.Source
+  }
+  else {
+    $userNpmGlobal = Join-Path $env:USERPROFILE ".npm-global\codex.cmd"
+    $appDataNpm = Join-Path $env:APPDATA "npm\codex.cmd"
+    if (Test-Path $userNpmGlobal) { $userNpmGlobal }
+    elseif (Test-Path $appDataNpm) { $appDataNpm }
+    else { "codex" }
+  }
 }
 
 try {

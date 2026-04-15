@@ -168,4 +168,4 @@ Recommended flow:
 
 See also:
 
-- [C:\Users\USER\Desktop\spark-researcher\docs\CHIP_TAGGING_RULESET.md](C:/Users/USER/Desktop/spark-researcher/docs/CHIP_TAGGING_RULESET.md)
+- [docs/CHIP_TAGGING_RULESET.md](CHIP_TAGGING_RULESET.md)

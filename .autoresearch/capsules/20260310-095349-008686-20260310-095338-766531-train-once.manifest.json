@@ -1,7 +1,7 @@
 {
   "artifact_paths": [
-    "C:\\Users\\USER\\Desktop\\spark-researcher\\artifacts\\runs\\20260310-095338-766531-train-once",
-    "C:\\Users\\USER\\Desktop\\spark-researcher\\artifacts\\runs\\20260310-095338-766531-train-once\\train.log"
+    "artifacts/runs/20260310-095338-766531-train-once",
+    "artifacts/runs/20260310-095338-766531-train-once/train.log"
   ],
   "baseline_value": 1.05,
   "capsule_id": "20260310-095349-008686-20260310-095338-766531-train-once",

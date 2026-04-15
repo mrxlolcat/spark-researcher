@@ -42,15 +42,15 @@ You can swap tools, but the system needs equivalents for orchestration, analytic
 ## Folder Location
 
 ```text
-C:\Users\USER\Desktop\spark-researcher\domain-chip-agentic-marketing
+path\to\domain-chip-agentic-marketing
 ```
 
 ## Quick Start
 
 ```powershell
-cd C:\Users\USER\Desktop\spark-researcher\domain-chip-agentic-marketing
+cd path\to\domain-chip-agentic-marketing
 python -m pip install -e .
-$env:PYTHONPATH='C:\Users\USER\Desktop\spark-researcher\src;src'
+$env:PYTHONPATH='..\spark-researcher\src;src'
 python -m spark_researcher.cli chips validate --config spark-researcher.project.json
 python -m spark_researcher.cli run --config spark-researcher.project.json --command research
 python -m spark_researcher.cli candidates suggest --config spark-researcher.project.json --command research

@@ -654,7 +654,7 @@ domain-chip-{DOMAIN_NAME}/
 spark-researcher chips init --domain {DOMAIN_NAME} --metric-name {PRIMARY_METRIC} --goal maximize
 
 # Default output root
-# C:\Users\USER\Desktop\domain-chip-{DOMAIN_NAME}
+# $env:USERPROFILE\Desktop\domain-chip-{DOMAIN_NAME}
 
 # Validate
 spark-researcher chips validate

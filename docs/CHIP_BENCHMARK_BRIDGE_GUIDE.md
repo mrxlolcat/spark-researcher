@@ -313,6 +313,6 @@ For each chip/benchmark pair, keep:
 
 The startup-specific version of this pattern is here:
 
-- [C:\Users\USER\Desktop\spark-researcher\docs\STARTUP_BENCH_PROMOTION_BRIDGE.md](C:/Users/USER/Desktop/spark-researcher/docs/STARTUP_BENCH_PROMOTION_BRIDGE.md)
+- [docs/STARTUP_BENCH_PROMOTION_BRIDGE.md](STARTUP_BENCH_PROMOTION_BRIDGE.md)
 
 Use that as the worked example, not the generic contract.

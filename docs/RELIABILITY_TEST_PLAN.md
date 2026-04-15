@@ -2,7 +2,7 @@
 
 Use this guide when you want to assess whether Spark Researcher is behaving like a small, honest, evidence-aware intelligence rather than just producing plausible output.
 
-This is more detailed than [CHECKLOOP](C:\Users\USER\Desktop\spark-researcher\docs\CHECKLOOP.md). `CHECKLOOP` proves the repo still runs. This plan checks whether the architecture is reliable one subsystem at a time.
+This is more detailed than [CHECKLOOP](CHECKLOOP.md). `CHECKLOOP` proves the repo still runs. This plan checks whether the architecture is reliable one subsystem at a time.
 
 Use this plan when:
 
@@ -63,7 +63,7 @@ Make sure you are testing a runnable repo before judging intelligence behavior.
 ### Commands
 
 ```powershell
-cd C:\Users\USER\Desktop\spark-researcher
+cd path\to\spark-researcher
 python -m pip install -e .
 python -m compileall src\spark_researcher
 spark-researcher line-budget --limit 11000
@@ -304,9 +304,9 @@ spark-researcher beliefs build
 
 ### Inspect
 
-- [docs/beliefs/manifest.json](C:\Users\USER\Desktop\spark-researcher\docs\beliefs\manifest.json)
-- [docs/beliefs/INDEX.md](C:\Users\USER\Desktop\spark-researcher\docs\beliefs\INDEX.md)
-- [docs/beliefs/CONTRADICTIONS.md](C:\Users\USER\Desktop\spark-researcher\docs\beliefs\CONTRADICTIONS.md)
+- [docs/beliefs/manifest.json](beliefs/manifest.json)
+- [docs/beliefs/INDEX.md](beliefs/INDEX.md)
+- [docs/beliefs/CONTRADICTIONS.md](beliefs/CONTRADICTIONS.md)
 
 ### What To Check
 

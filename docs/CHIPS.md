@@ -63,7 +63,7 @@ spark-researcher chips init --domain foo --metric-name foo_score --goal maximize
 This defaults to a standalone Desktop sibling folder:
 
 ```text
-C:\Users\USER\Desktop\domain-chip-foo
+$env:USERPROFILE\Desktop\domain-chip-foo
 ```
 
 Rules:
@@ -214,7 +214,7 @@ If the payload is stale, `collective ready` now also reports:
 If a chip looks connected locally but the hosted Spark Swarm lane is wrong, resync from the chip repo root:
 
 ```powershell
-$env:PYTHONPATH='C:\Users\USER\Desktop\spark-researcher\src;src'
+$env:PYTHONPATH='..\spark-researcher\src;src'
 python -m spark_researcher.cli collective ready
 python -m spark_researcher.cli collective spark-swarm-payload
 python -m spark_researcher.cli collective publish

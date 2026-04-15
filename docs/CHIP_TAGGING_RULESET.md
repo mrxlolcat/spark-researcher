@@ -218,5 +218,5 @@ This tagging guide defines how short reusable pattern labels should be created f
 
 See also:
 
-- [C:\Users\USER\Desktop\spark-researcher\docs\CHIP_RESEARCH_PACKET_SCHEMA.md](C:/Users/USER/Desktop/spark-researcher/docs/CHIP_RESEARCH_PACKET_SCHEMA.md)
-- [C:\Users\USER\Desktop\spark-researcher\docs\CHIP_DSPY_METHOD.md](C:/Users/USER/Desktop/spark-researcher/docs/CHIP_DSPY_METHOD.md)
+- [docs/CHIP_RESEARCH_PACKET_SCHEMA.md](CHIP_RESEARCH_PACKET_SCHEMA.md)
+- [docs/CHIP_DSPY_METHOD.md](CHIP_DSPY_METHOD.md)

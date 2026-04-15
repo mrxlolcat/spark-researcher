@@ -4,13 +4,13 @@ Use the local checkloop repo as the 1:1 proving ground for `spark-researcher` be
 
 ## Current Repo
 
-- checker path: `C:\Users\USER\Desktop\spark-researcher-checkloop-pristine`
-- expected sync target: the current `main` commit of `C:\Users\USER\Desktop\spark-researcher`
+- checker path: `path\to\spark-researcher-checkloop-pristine`
+- expected sync target: the current `main` commit of your `spark-researcher` clone
 
 ## Standard Flow
 
 ```powershell
-cd C:\Users\USER\Desktop\spark-researcher-checkloop-pristine
+cd path\to\spark-researcher-checkloop-pristine
 git fetch origin
 git pull --ff-only origin main
 git rev-parse HEAD

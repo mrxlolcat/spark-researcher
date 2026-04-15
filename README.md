@@ -173,7 +173,7 @@ You review the proposal
 ## Quick Start
 
 ```powershell
-cd C:\Users\USER\Desktop\spark-researcher
+cd path\to\spark-researcher
 python -m pip install -e .
 spark-researcher run --command train
 spark-researcher loop --command train
@@ -239,7 +239,7 @@ For Spark Swarm specialization-path work, the main architecture notes are in [`d
 
 Rule:
 - never place a `domain-chip-*` repo inside the `spark-researcher` repo tree
-- create chips as sibling Desktop repos, for example `C:\Users\USER\Desktop\domain-chip-foo`
+- create chips as sibling repos outside `spark-researcher`, for example `..\domain-chip-foo`
 
 ## Where To Read Next
 

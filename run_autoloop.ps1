@@ -18,6 +18,14 @@ $previousOpenAiKey = $env:OPENAI_API_KEY
 $previousOpenAiBaseUrl = $env:OPENAI_BASE_URL
 $hadOpenAiKey = $null -ne (Get-Item Env:OPENAI_API_KEY -ErrorAction SilentlyContinue)
 $hadOpenAiBaseUrl = $null -ne (Get-Item Env:OPENAI_BASE_URL -ErrorAction SilentlyContinue)
+$repoRoot = $PSScriptRoot
+$workspaceRoot = Split-Path $repoRoot -Parent
+$startupBenchRoot = Join-Path $workspaceRoot "startup-bench"
+$startupChipRoot = Join-Path $workspaceRoot "domain-chip-startup-yc"
+$pythonPathEntries = @(
+    (Join-Path $repoRoot "src"),
+    (Join-Path $startupChipRoot "src")
+) -join ";"
 
 try {
     Import-DspyEnvFile (Join-Path $PSScriptRoot ".env.dspy.local")
@@ -35,12 +43,15 @@ try {
     if ([string]::IsNullOrWhiteSpace($env:SPARK_STARTUP_DSPY_MODEL)) {
         $env:SPARK_STARTUP_DSPY_MODEL = "openai/MiniMax-M2.5"
     }
-    $env:SPARK_STARTUP_BENCH_ROOT = "C:\Users\USER\Desktop\startup-bench"
+    if (-not (Test-Path $startupChipRoot)) {
+        throw "Expected startup chip repo at $startupChipRoot."
+    }
+    $env:SPARK_STARTUP_BENCH_ROOT = $startupBenchRoot
     $env:SPARK_STARTUP_YC_LOCAL_FRONTIER = "1"
     $env:SPARK_STARTUP_DSPY_SLOT1_AUTORUN = "1"
     # Backlog limit now defaults to 5 in code (was 2). No override needed.
     $env:SPARK_STARTUP_DOCTRINE_ONLY = "1"
-    $env:PYTHONPATH = "C:\Users\USER\Desktop\spark-researcher\src;C:\Users\USER\Desktop\domain-chip-startup-yc\src"
+    $env:PYTHONPATH = $pythonPathEntries
     $env:PYTHONUNBUFFERED = "1"
 
     Write-Host "=== Startup Autoloop Environment ==="
@@ -51,7 +62,7 @@ try {
     Write-Host "LOCAL_FRONTIER: $env:SPARK_STARTUP_YC_LOCAL_FRONTIER"
     Write-Host "====================================="
 
-    Set-Location "C:\Users\USER\Desktop\domain-chip-startup-yc"
+    Set-Location $startupChipRoot
     & python -u -m spark_researcher.cli autoloop --command research --continuous --rounds 6 --suggest-limit 3 --pause-seconds 300
 }
 finally {
