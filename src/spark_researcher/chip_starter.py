@@ -73,7 +73,6 @@ def _gitignore() -> str:
         [
             "artifacts/",
             "obsidian-vault/",
-            "docs/beliefs/",
             "__pycache__/",
             "*.pyc",
             "*.egg-info/",

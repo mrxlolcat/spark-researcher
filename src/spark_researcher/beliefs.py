@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from .config import load_config
-from .paths import resolve_runtime_root
+from .paths import beliefs_root, resolve_runtime_root
 from .runner import read_jsonl
 
 
@@ -28,8 +28,8 @@ def _safe_unlink(path: Path) -> None:
         pass
 
 
-def _docs_root(repo_root: Path) -> Path:
-    return repo_root / "docs" / "beliefs"
+def _beliefs_root(runtime_root: Path) -> Path:
+    return beliefs_root(runtime_root)
 
 
 def _self_edit_root(runtime_root: Path) -> Path:
@@ -276,7 +276,7 @@ def _render_self_edit_belief(proposal: dict[str, Any], review: dict[str, Any]) -
 def build_beliefs(repo_root: Path, runtime_root: Path | None = None) -> dict[str, Any]:
     runtime_root = runtime_root or resolve_runtime_root(repo_root / "spark-researcher.project.json")
     config = load_config(repo_root / "spark-researcher.project.json")
-    output_root = _docs_root(repo_root)
+    output_root = _beliefs_root(runtime_root)
     output_root.mkdir(parents=True, exist_ok=True)
     for path in output_root.glob("*.md"):
         _safe_unlink(path)

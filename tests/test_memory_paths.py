@@ -67,6 +67,7 @@ def test_build_beliefs_bounds_long_belief_filenames(tmp_path: Path) -> None:
     belief = manifest["beliefs"][0]
     belief_path = Path(str(belief["path"]))
     assert belief_path.exists()
+    assert belief_path.is_relative_to(runtime_root / "artifacts" / "beliefs")
     assert len(belief_path.stem) <= 80
     assert len(str(belief["belief_id"])) > len(belief_path.stem)
 

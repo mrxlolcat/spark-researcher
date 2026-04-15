@@ -54,6 +54,10 @@ def memory_root(runtime_root: Path) -> Path:
     return artifacts_root(runtime_root) / "memory"
 
 
+def beliefs_root(runtime_root: Path) -> Path:
+    return artifacts_root(runtime_root) / "beliefs"
+
+
 def self_edit_root(runtime_root: Path) -> Path:
     return artifacts_root(runtime_root) / "self-edit"
 

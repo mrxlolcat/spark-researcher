@@ -11,7 +11,7 @@ from typing import Any
 
 from .beliefs import build_beliefs
 from .chips import chip_has_hook, invoke_chip_hook
-from .paths import memory_root, self_edit_root
+from .paths import beliefs_root, memory_root, self_edit_root
 from .runner import read_jsonl
 from .ruvector import run_search as run_ruvector_search
 from .ruvector import ruvector_status
@@ -555,9 +555,9 @@ def sync_memory(repo_root: Path, runtime_root: Path, *, goal: str = "minimize", 
         kind_counts["run"] += 1
         tier_counts[memory_tier] += 1
 
-    beliefs_root = repo_root / "docs" / "beliefs"
-    if beliefs_root.exists():
-        for path in sorted(beliefs_root.glob("*.md")):
+    belief_docs_root = beliefs_root(runtime_root)
+    if belief_docs_root.exists():
+        for path in sorted(belief_docs_root.glob("*.md")):
             if path.name.upper() == "INDEX.MD":
                 continue
             target = _unique_document_path(docs_root, f"belief-{path.stem}", used_paths)

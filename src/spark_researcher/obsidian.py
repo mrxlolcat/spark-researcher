@@ -9,7 +9,7 @@ from .beliefs import build_beliefs
 from .chips import chip_has_hook, invoke_chip_hook
 from .memory import load_episode_memory, load_working_memory, sync_memory
 from .packets import packet_status
-from .paths import trainers_root, vault_root
+from .paths import beliefs_root, trainers_root, vault_root
 from .runner import ledger_summary, read_jsonl
 from .tracing import trace_status
 from .trial_queue import pending_queue_count
@@ -29,6 +29,24 @@ def copy_docs(repo_root: Path, output_root: Path) -> list[str]:
     for path in sorted(source.rglob("*.md")):
         target = output_root / path.relative_to(source)
         target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(path, target)
+        written.append(str(target))
+    return written
+
+
+def copy_runtime_beliefs(runtime_root: Path, output_root: Path) -> list[str]:
+    written = []
+    source = beliefs_root(runtime_root)
+    output_root.mkdir(parents=True, exist_ok=True)
+    if not source.exists():
+        return written
+    for path in output_root.glob("*"):
+        if path.is_file():
+            path.unlink()
+    for path in sorted(source.glob("*")):
+        if not path.is_file():
+            continue
+        target = output_root / path.name
         shutil.copyfile(path, target)
         written.append(str(target))
     return written
@@ -377,6 +395,7 @@ def build_vault(repo_root: Path, runtime_root: Path, config: ProjectConfig, *, c
             write_text(output_root / page_path, str(item.get("content") or ""))
             domain_pages.append(page_path.removesuffix(".md"))
     copy_docs(repo_root, output_root / "06-References")
+    copy_runtime_beliefs(runtime_root, output_root / "06-References" / "beliefs")
     write_text(
         output_root / "Home.md",
         render_home(summary, trainer_rows, memory_manifest, belief_manifest, packet_manifest, domain_pages, traces.get("research_signals", {}), frontier_queue_count),

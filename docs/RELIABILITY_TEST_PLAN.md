@@ -304,9 +304,9 @@ spark-researcher beliefs build
 
 ### Inspect
 
-- [docs/beliefs/manifest.json](beliefs/manifest.json)
-- [docs/beliefs/INDEX.md](beliefs/INDEX.md)
-- [docs/beliefs/CONTRADICTIONS.md](beliefs/CONTRADICTIONS.md)
+- `artifacts/beliefs/manifest.json`
+- `artifacts/beliefs/INDEX.md`
+- `artifacts/beliefs/CONTRADICTIONS.md`
 
 ### What To Check
 

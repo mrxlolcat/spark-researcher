@@ -79,7 +79,7 @@ They now belong under [`docs/archive/`](archive/README.md) unless a runtime cont
 
 These are useful context, but they are not required to understand or operate the core public system safely.
 
-`docs/beliefs/*` is intentionally not moved yet because the runtime and watchtower system still treat it as a live output path.
+Generated belief output now lives under `artifacts/beliefs/`, not `docs/`.
 
 ## No-Regression Guardrail
 

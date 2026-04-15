@@ -21,6 +21,6 @@ Do not archive away the only copy of:
 - memory-tier semantics
 - Obsidian/watchtower semantics
 - self-edit/backend boundaries
-- active runtime output paths
+- active runtime output paths that still live in tracked docs
 
-That is why `docs/beliefs/` stays outside archive for now.
+Generated belief output no longer lives under `docs/`; it is emitted under `artifacts/beliefs/`.
