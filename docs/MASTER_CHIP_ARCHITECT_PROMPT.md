@@ -1,5 +1,9 @@
 # Master Chip Architect Prompt
 
+> This is the `v1` chip design prompt.
+> If you want the stricter prompt-stack version, use [`docs/master_chip_v2/README.md`](master_chip_v2/README.md).
+> Use [`docs/CHIP_SYSTEMS.md`](CHIP_SYSTEMS.md) for the chooser between `v1` and `v2`.
+
 > Replace `{DOMAIN_NAME}` with the target domain (e.g., `trading`, `xcontent`, `recruiting`).
 > Replace `{DOMAIN_DISPLAY_NAME}` with the human-readable form (e.g., `Crypto Trading`, `X Content`).
 > Replace `{PRIMARY_METRIC}` with the chip's primary eval metric (e.g., `profitability_score`, `engagement_quality_score`).

@@ -58,6 +58,24 @@ def test_init_chip_writes_readme_with_resolved_root(tmp_path: Path) -> None:
     assert result["next_steps"][0] == f"cd {chip_root.resolve()}"
     assert "git init" in result["next_steps"]
     assert any("chips validate --config" in step for step in result["next_steps"])
+    assert "docs/CHIP_SYSTEMS.md" in readme
+    assert "python -m pip install -e ..\\spark-researcher" in readme
+    assert "$env:PYTHONPATH='..\\spark-researcher\\src;src'" in readme
+
+
+def test_preset_readmes_reference_chip_systems_and_relative_spark_repo() -> None:
+    crypto_readme = chip_starter._crypto_readme("domain-chip-trading-crypto", "domain_chip_trading_crypto", Path("..\\domain-chip-trading-crypto"))
+    xcontent_readme = chip_starter._xcontent_readme("domain-chip-xcontent", "domain_chip_xcontent", Path("..\\domain-chip-xcontent"))
+
+    assert "docs/CHIP_SYSTEMS.md" in crypto_readme
+    assert "docs/CHIPS.md" in crypto_readme
+    assert "python -m pip install -e ..\\spark-researcher" in crypto_readme
+    assert "$env:PYTHONPATH='..\\spark-researcher\\src;src'" in crypto_readme
+
+    assert "docs/CHIP_SYSTEMS.md" in xcontent_readme
+    assert "docs/CHIPS.md" in xcontent_readme
+    assert "python -m pip install -e ..\\spark-researcher" in xcontent_readme
+    assert "$env:PYTHONPATH='..\\spark-researcher\\src;src'" in xcontent_readme
 
 
 def test_init_chip_refuses_targets_inside_spark_repo(monkeypatch, tmp_path: Path) -> None:

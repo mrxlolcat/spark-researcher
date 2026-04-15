@@ -2,6 +2,11 @@
 
 This folder contains the `master_chip_v2` prompt stack for designing, building, reviewing, and testing Spark domain chips.
 
+This is the stricter `v2` chip design system, not the only chip design path.
+
+If you want the lighter `v1` path, use [`../MASTER_CHIP_ARCHITECT_PROMPT.md`](../MASTER_CHIP_ARCHITECT_PROMPT.md).
+If you want the chooser between them, use [`../CHIP_SYSTEMS.md`](../CHIP_SYSTEMS.md).
+
 Use these docs in this order.
 
 ## Prompt Stack
@@ -101,4 +106,3 @@ The prompt stack is grounded in:
 - Spark core implementation under `src/spark_researcher/`
 - `../domain-chip-startup-yc`
 - `../domain-chip-trading-crypto`
-

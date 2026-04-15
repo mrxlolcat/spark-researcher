@@ -182,11 +182,20 @@ def _generic_readme(chip_name: str, domain: str, chip_root: Path) -> str:
 
         `{chip_name}` is a Spark domain chip scaffold for `{domain}`.
 
+        Design-system rule:
+
+        - Spark has one runtime chip contract in `docs/CHIPS.md`
+        - choose your chip design path from `docs/CHIP_SYSTEMS.md`
+        - use `v1` for lighter exploration
+        - use `v2` for stricter, more durable standardization
+
         ## Quick Start
 
         ```powershell
         cd {chip_root}
         python -m pip install -e .
+        python -m pip install -e ..\\spark-researcher
+        $env:PYTHONPATH='..\\spark-researcher\\src;src'
         python -m spark_researcher.cli chips validate
         python -m spark_researcher.cli autoloop --command research
         ```
@@ -356,13 +365,19 @@ def _crypto_readme(chip_name: str, package_name: str, chip_root: Path) -> str:
         - explicit bridge semantics for promotion to paper trade
         - benchmark evidence, doctrine candidates, boundary candidates, and exploratory probes kept separate
 
+        Design-system rule:
+
+        - choose your chip design path from `docs/CHIP_SYSTEMS.md`
+        - use `v2` if this chip is meant to become a durable trading standard
+        - keep the runtime contract grounded in `docs/CHIPS.md`
+
         ## Quick Start
 
         ```powershell
         cd {chip_root}
         python -m pip install -e .
-        python -m pip install -e C:\\Users\\USER\\Desktop\\spark-researcher
-        $env:PYTHONPATH='C:\\Users\\USER\\Desktop\\spark-researcher\\src;src'
+        python -m pip install -e ..\\spark-researcher
+        $env:PYTHONPATH='..\\spark-researcher\\src;src'
         python -m spark_researcher.cli chips validate
         python -m spark_researcher.cli autoloop --command research
         ```
@@ -687,13 +702,19 @@ def _xcontent_readme(chip_name: str, package_name: str, chip_root: Path) -> str:
         - **Grok/xAI API**: Content relevance scoring, trend alignment, discoverability prediction
         - **Benchmark**: Deterministic scaffold evaluator (replace with live X API + Grok grading)
 
+        Design-system rule:
+
+        - choose your chip design path from `docs/CHIP_SYSTEMS.md`
+        - use `v1` for lighter experimentation or `v2` for stricter reusable standards
+        - keep the runtime contract grounded in `docs/CHIPS.md`
+
         ## Quick Start
 
         ```powershell
         cd {chip_root}
         python -m pip install -e .
-        python -m pip install -e C:\\Users\\USER\\Desktop\\spark-researcher
-        $env:PYTHONPATH='C:\\Users\\USER\\Desktop\\spark-researcher\\src;src'
+        python -m pip install -e ..\\spark-researcher
+        $env:PYTHONPATH='..\\spark-researcher\\src;src'
         python -m spark_researcher.cli chips validate
         python -m spark_researcher.cli autoloop --command research
         ```

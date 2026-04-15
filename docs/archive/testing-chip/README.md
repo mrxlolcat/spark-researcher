@@ -17,7 +17,7 @@ Temporarily point the current project at this chip:
 ```json
 {
   "chip": {
-    "path": "docs/testing-chip",
+    "path": "docs/archive/testing-chip",
     "manifest": "spark-chip.json"
   }
 }

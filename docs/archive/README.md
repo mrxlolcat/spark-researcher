@@ -1,0 +1,26 @@
+# Archive
+
+This folder contains deep-background, backlog, and publication-deprioritized docs.
+
+These files are kept in the repo so historical context and agent references do not disappear, but they are not part of the main public docs path.
+
+## What Belongs Here
+
+- strategy/background essays
+- backlog and hardening plans
+- remediation prompt collections
+- experimental reference materials
+- internal examples that are useful, but not part of the front-door system story
+
+## What Does Not Belong Here
+
+Do not archive away the only copy of:
+
+- Spark Swarm runtime-core semantics
+- chip runtime contract
+- memory-tier semantics
+- Obsidian/watchtower semantics
+- self-edit/backend boundaries
+- active runtime output paths
+
+That is why `docs/beliefs/` stays outside archive for now.

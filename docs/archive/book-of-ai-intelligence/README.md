@@ -2,7 +2,7 @@
 
 Companion reference for how those ideas map onto real AI-lab practice and Spark's own architecture:
 
-- [docs/AI_LAB_MAP.md](../AI_LAB_MAP.md)
+- [AI Lab Map](../AI_LAB_MAP.md)
 
 *A nontechnical training playbook for building a smarter agent.*
 
@@ -55,4 +55,4 @@ It explains:
 
 You asked for this as a separate desktop folder and GitHub repo.
 
-Inside this workspace, the allowed edit area is limited, so this book is packaged under `docs/book-of-ai-intelligence/` as a repo-ready folder that can later be copied into its own standalone repository if needed.
+Inside this workspace, the book is now kept under `docs/archive/book-of-ai-intelligence/` as archived deep-background material that can later be copied into its own standalone repository if needed.

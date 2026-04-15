@@ -258,6 +258,8 @@ If you want a specific area:
 - self-edit workflow: [`docs/SELF_EDITING.md`](docs/SELF_EDITING.md)
 - external coding backend contract: [`docs/AGENT_BACKENDS.md`](docs/AGENT_BACKENDS.md)
 - domain-chip system: [`docs/CHIPS.md`](docs/CHIPS.md)
+- chip design systems (`v1` vs `v2`): [`docs/CHIP_SYSTEMS.md`](docs/CHIP_SYSTEMS.md)
+- docs publishing map: [`docs/PUBLICATION_MAP.md`](docs/PUBLICATION_MAP.md)
 
 ## Boundaries
 
@@ -277,3 +279,4 @@ Spark Researcher is intentionally opinionated:
 - not a system that should silently edit production code without review
 
 For the full documentation map, use [`docs/README.md`](docs/README.md).
+For the safe public-vs-reference split, use [`docs/PUBLICATION_MAP.md`](docs/PUBLICATION_MAP.md).

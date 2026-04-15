@@ -41,6 +41,18 @@ The canonical schema lives at `schemas/spark-chip.schema.json`.
 
 Use `docs/README.md` for the full chip-doc map.
 
+## Design Systems
+
+Spark has one runtime chip contract and two design systems.
+
+- runtime contract: this document
+- design-system chooser: [`docs/CHIP_SYSTEMS.md`](CHIP_SYSTEMS.md)
+- `v1`: [`docs/MASTER_CHIP_ARCHITECT_PROMPT.md`](MASTER_CHIP_ARCHITECT_PROMPT.md)
+- `v2`: [`docs/master_chip_v2/README.md`](master_chip_v2/README.md)
+
+Use `v1` or `v2` to design the chip.
+Use this document to understand what Spark itself expects the chip to implement.
+
 ## Related Docs
 
 - validation: `docs/CHIP_VALIDATION.md`, `docs/CHECKLOOP.md`

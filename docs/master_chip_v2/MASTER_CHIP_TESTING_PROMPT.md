@@ -27,8 +27,8 @@ Base the testing system on the current Spark standards in:
 - `docs/OBSIDIAN.md`
 - `docs/CHIP_MEMORY_ROLLOUT.md`
 - `docs/AUTOLOOP.md`
-- `docs/testing-chip/README.md`
-- `docs/testing-chip/cli.py`
+- `docs/archive/testing-chip/README.md`
+- `docs/archive/testing-chip/cli.py`
 
 Also inspect the runtime behavior in:
 
@@ -258,7 +258,7 @@ When the domain uses research:
 - benchmark-grounded and heuristic-frontier results remain visibly distinct
 - pages do not imply benchmark grounding for heuristic-only outputs
 
-Use the spirit of `docs/testing-chip/cli.py`:
+Use the spirit of `docs/archive/testing-chip/cli.py`:
 
 - deterministic checks
 - small temporary fixtures
@@ -363,4 +363,3 @@ Return the final testing plan in this order:
 Success condition:
 
 The result should give `{DOMAIN_NAME}` a small but real testing system that proves the chip bridge, evaluator, packets, memory, and watchtower are working honestly instead of only looking plausible.
-

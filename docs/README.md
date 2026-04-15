@@ -17,6 +17,16 @@ Read these first if you are new to the repo:
 3. [`docs/RULES.md`](RULES.md)
 4. [`docs/CHECKLOOP.md`](CHECKLOOP.md)
 
+## Publication Tiers
+
+Use [`docs/PUBLICATION_MAP.md`](PUBLICATION_MAP.md) when deciding what belongs on the public front door versus what should stay as reference or archive.
+
+Current rule:
+
+- public docs should explain the core system cleanly
+- reference docs should remain available for agents and advanced operators
+- archive docs should stay in the repo for now so links and agent understanding do not regress
+
 ## Core Operator Docs
 
 - [`docs/AUTOLOOP.md`](AUTOLOOP.md): bounded autonomous loop behavior and limits
@@ -45,6 +55,8 @@ Treat generated local files like `AUTORESEARCH.md` and `PROJECT.md` as operation
 ## Domain Chip Docs
 
 - [`docs/CHIPS.md`](CHIPS.md): chip contract, ownership boundary, and scaffold flow
+- [`docs/CHIP_SYSTEMS.md`](CHIP_SYSTEMS.md): chooser for `v1` vs `v2` chip design systems
+- [`docs/CHIP_BAKEOFF.md`](CHIP_BAKEOFF.md): evaluation plan for comparing `v1` and `v2`
 - [`docs/CHIP_VALIDATION.md`](CHIP_VALIDATION.md): standard chip validation path
 - [`docs/CHIP_REGISTRY.md`](CHIP_REGISTRY.md): known chips
 - [`docs/CHIP_MEMORY_ROLLOUT.md`](CHIP_MEMORY_ROLLOUT.md): chip memory upgrade path
@@ -57,7 +69,8 @@ Treat generated local files like `AUTORESEARCH.md` and `PROJECT.md` as operation
 - [`docs/CHIP_DSPY_METHOD.md`](CHIP_DSPY_METHOD.md): narrow optimizer method
 - [`docs/CHIP_BENCHMARK_BRIDGE_GUIDE.md`](CHIP_BENCHMARK_BRIDGE_GUIDE.md): benchmark promotion bridge
 - [`docs/STARTUP_BENCH_PROMOTION_BRIDGE.md`](STARTUP_BENCH_PROMOTION_BRIDGE.md): startup-chip-specific benchmark bridge
-- [`docs/EXTERNAL_CHIP_TASKS.md`](EXTERNAL_CHIP_TASKS.md): external chip task surfaces
+- [`docs/MASTER_CHIP_ARCHITECT_PROMPT.md`](MASTER_CHIP_ARCHITECT_PROMPT.md): `v1` chip design prompt
+- [`docs/master_chip_v2/README.md`](master_chip_v2/README.md): `v2` chip prompt stack
 
 ## Reliability And Review
 
@@ -66,14 +79,9 @@ Treat generated local files like `AUTORESEARCH.md` and `PROJECT.md` as operation
 - [`docs/ADVISORY.md`](ADVISORY.md): verifier and research retry boundaries
 - [`docs/SELF_EDITING.md`](SELF_EDITING.md): self-edit review and apply boundaries
 
-## Strategy And Deep Dives
+## Archive And Deep Background
 
-- [`docs/AI_LAB_MAP.md`](AI_LAB_MAP.md): how Spark maps to AI-lab style practice
-- [`docs/FRONTIER_LAB_BENCHMARKING_BOOK.md`](FRONTIER_LAB_BENCHMARKING_BOOK.md): benchmark framing and research doctrine
-- [`docs/CHIP_ECOSYSTEM_HARDENING_PLAN.md`](CHIP_ECOSYSTEM_HARDENING_PLAN.md): chip ecosystem hardening backlog
-- [`docs/CHIP_REMEDIATION_PROMPTS.md`](CHIP_REMEDIATION_PROMPTS.md): remediation prompt library
-- [`docs/book-of-ai-intelligence/README.md`](book-of-ai-intelligence/README.md): book-length playbook
-- [`docs/master_chip_v2/README.md`](master_chip_v2/README.md): master-chip prompt pack
+Use [`docs/archive/README.md`](archive/README.md) for archived deep-background docs, internal examples, and backlog material that should stay available without remaining on the public front door.
 
 ## Root-Level Repo Docs
 
@@ -93,3 +101,8 @@ When adding or revising docs:
 - update [`docs/README.md`](README.md) when a new durable document becomes part of the operator surface
 - keep detailed procedures in one focused document instead of copying sections into [`README.md`](../README.md)
 - link across docs instead of restating the same command list or policy twice
+
+For publishing:
+
+- keep the public front door aligned with [`docs/PUBLICATION_MAP.md`](PUBLICATION_MAP.md)
+- do not remove reference docs that agents still need to understand Spark Swarm, chips, memory, Obsidian, or self-edit boundaries
