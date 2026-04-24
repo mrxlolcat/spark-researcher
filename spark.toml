@@ -1,0 +1,67 @@
+[module]
+name = "spark-researcher"
+version = "0.1.0"
+kind = "runtime"
+plane = "research"
+description = "Local autoresearch, advisory, memory packet, and bounded self-improvement runtime for Spark."
+homepage = "https://github.com/vibeforge1111/spark-researcher"
+license = "UNLICENSED"
+
+[runtime]
+kind = "python"
+version = ">=3.10"
+package_manager = "pip"
+
+[install.dev]
+commands = ["python -m pip install -e ."]
+
+[provides]
+capabilities = [
+  "spark.researcher",
+  "spark.advisory",
+  "spark.research.memory",
+  "spark.domain_chip.authoring",
+]
+binary = "spark-researcher"
+
+[needs]
+modules = []
+capabilities = []
+secrets = []
+
+[claims]
+secrets = []
+ports = []
+routes = []
+
+[healthcheck]
+command = "python -m spark_researcher.cli memory status --config spark-researcher.project.json"
+timeout_seconds = 20
+success_hint = "Spark Researcher memory and advisory runtime is readable."
+failure_hint = "Run `spark-researcher memory status --config spark-researcher.project.json` in the module home for detail."
+
+[entrypoints]
+cli = "spark-researcher"
+
+[config]
+format = "json"
+installer_owned = false
+primary = "spark-researcher.project.json"
+
+[paths]
+home = "~/.spark/modules/spark-researcher"
+state = "~/.spark/state/spark-researcher"
+logs = "~/.spark/logs/spark-researcher"
+
+[profiles.telegram_starter]
+role = "research-and-advisory-runtime"
+owns = [
+  "spark.researcher",
+  "spark.advisory",
+  "spark.research.memory",
+  "spark.domain_chip.authoring",
+]
+does_not_own = [
+  "telegram.ingress",
+  "telegram.bot_token",
+]
