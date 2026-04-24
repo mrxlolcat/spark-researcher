@@ -15,6 +15,20 @@ It is built for people who want something more disciplined than "ask an AI and h
 
 In the Spark launch stack, `spark-researcher` is installed by `spark setup` as the research, advisory, memory-packet, and chip-authoring runtime behind Builder. It does not own Telegram ingress, Spawner missions, or user secrets for the gateway.
 
+## Where It Fits
+
+```mermaid
+flowchart LR
+  Builder["spark-intelligence-builder"] --> Researcher["spark-researcher"]
+  Researcher --> Advisory["advisory briefs"]
+  Researcher --> Memory["memory packets"]
+  Researcher --> Chips["domain chip authoring"]
+  Researcher --> Ledger["experiment ledger"]
+  Memory --> Builder
+```
+
+Spark Researcher is the disciplined local lab. Builder decides when to call it, domain chips provide specialized logic, and Telegram/Spawner expose user-facing surfaces.
+
 It started as a blend of two ideas:
 
 - the compactness of Karpathy's `autoresearch`
@@ -44,6 +58,17 @@ And you want a local loop that can:
 - suggest the next bounded experiment
 
 If that is your use case, you can get value from the toy project in a few minutes.
+
+## For Agents
+
+If you are Claude Code, Codex, or another LLM agent reading this repo:
+
+1. Use `spark-researcher.project.json` to understand the active project.
+2. Use `spark-researcher run --command <name>` for one measured run.
+3. Use `spark-researcher autoloop --command <name> --rounds <n>` only for bounded experiments.
+4. Use `spark-researcher memory status` before assuming memory exists.
+5. Do not silently apply self-edit proposals; keep them reviewable.
+6. Keep provider keys and private artifacts out of committed docs and examples.
 
 ## Install
 
