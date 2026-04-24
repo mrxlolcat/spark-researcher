@@ -13,6 +13,8 @@ In plain English:
 
 It is built for people who want something more disciplined than "ask an AI and hope", but much lighter than a full platform.
 
+In the Spark launch stack, `spark-researcher` is installed by `spark setup` as the research, advisory, memory-packet, and chip-authoring runtime behind Builder. It does not own Telegram ingress, Spawner missions, or user secrets for the gateway.
+
 It started as a blend of two ideas:
 
 - the compactness of Karpathy's `autoresearch`
@@ -61,14 +63,18 @@ If you want the CLI available globally with `pipx`:
 pipx install git+https://github.com/vibeforge1111/spark-researcher.git
 ```
 
-One-command bootstrap:
+Script bootstrap without piping remote code directly into a shell:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/vibeforge1111/spark-researcher/main/scripts/install.sh | bash
+curl -fsSLO https://raw.githubusercontent.com/vibeforge1111/spark-researcher/main/scripts/install.sh
+less install.sh
+bash ./install.sh
 ```
 
 ```powershell
-irm https://raw.githubusercontent.com/vibeforge1111/spark-researcher/main/scripts/install.ps1 | iex
+iwr https://raw.githubusercontent.com/vibeforge1111/spark-researcher/main/scripts/install.ps1 -OutFile .\install.ps1
+Get-Content .\install.ps1
+powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
 Important distinction:
