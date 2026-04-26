@@ -22,6 +22,26 @@ class AdapterExecTests(unittest.TestCase):
             command = _resolve_command("codex")
         self.assertEqual(command[:2], ["codex", "exec"])
 
+    def test_resolve_command_rejects_env_override_to_unknown_executable(self) -> None:
+        with patch.dict(os.environ, {"SPARK_RESEARCHER_ADAPTER_CODEX_COMMAND": "powershell -NoProfile -Command Invoke-Thing"}, clear=False):
+            with self.assertRaisesRegex(RuntimeError, "not allowed"):
+                _resolve_command("codex")
+
+    def test_generic_adapter_is_disabled_by_default(self) -> None:
+        with patch.dict(os.environ, {"SPARK_RESEARCHER_ADAPTER_GENERIC_COMMAND": "runner --input {request_path}"}, clear=False):
+            with self.assertRaisesRegex(RuntimeError, "disabled by default"):
+                _resolve_command("generic")
+
+    def test_generic_adapter_requires_explicit_executable_allowlist(self) -> None:
+        env = {
+            "SPARK_RESEARCHER_ENABLE_GENERIC_ADAPTER": "1",
+            "SPARK_RESEARCHER_ADAPTER_ALLOWED_EXECUTABLES": "runner",
+            "SPARK_RESEARCHER_ADAPTER_GENERIC_COMMAND": "runner --input {request_path}",
+        }
+        with patch.dict(os.environ, env, clear=False):
+            command = _resolve_command("generic")
+        self.assertEqual(command[:2], ["runner", "--input"])
+
     def test_execution_status_marks_default_codex_source(self) -> None:
         with patch.dict(os.environ, {}, clear=True):
             with patch("spark_researcher.adapters.exec.shutil.which", side_effect=lambda name: "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" if name == "powershell" else None):

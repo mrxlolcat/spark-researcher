@@ -21,6 +21,16 @@ ENV_KEYS = {
     "generic": "SPARK_RESEARCHER_ADAPTER_GENERIC_COMMAND",
 }
 
+GENERIC_ADAPTER_ENABLE_ENV = "SPARK_RESEARCHER_ENABLE_GENERIC_ADAPTER"
+EXTRA_ALLOWED_EXECUTABLES_ENV = "SPARK_RESEARCHER_ADAPTER_ALLOWED_EXECUTABLES"
+
+ALLOWED_ADAPTER_EXECUTABLES = {
+    "claude": {"claude", "claude.cmd", "claude.exe"},
+    "codex": {"codex", "codex.cmd", "codex.exe"},
+    "openclaw": {"openclaw", "openclaw.cmd", "openclaw.exe"},
+    "generic": set(),
+}
+
 _PLACEHOLDER_RE = re.compile(r"\{([a-zA-Z_][a-zA-Z0-9_]*)\}")
 
 
@@ -59,14 +69,53 @@ def _default_command(model: str) -> list[str]:
     ]
 
 
+def _truthy_env(name: str) -> bool:
+    return os.environ.get(name, "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _executable_name(executable: str) -> str:
+    normalized = executable.strip().strip("\"'")
+    return Path(normalized).name.lower()
+
+
+def _extra_allowed_executables() -> set[str]:
+    raw = os.environ.get(EXTRA_ALLOWED_EXECUTABLES_ENV, "")
+    return {_executable_name(item) for item in raw.split(",") if item.strip()}
+
+
+def _validate_command(model: str, command: list[str]) -> list[str]:
+    if model not in ENV_KEYS:
+        raise RuntimeError(f"Unsupported execution model `{model}`.")
+    if not command:
+        return command
+    if model == "generic" and not _truthy_env(GENERIC_ADAPTER_ENABLE_ENV):
+        raise RuntimeError(
+            "The generic execution adapter is disabled by default. Set "
+            f"{GENERIC_ADAPTER_ENABLE_ENV}=1 and {EXTRA_ALLOWED_EXECUTABLES_ENV} to an explicit executable allowlist."
+        )
+    executable = _executable_name(command[0])
+    allowed = set(ALLOWED_ADAPTER_EXECUTABLES.get(model, set())) | _extra_allowed_executables()
+    if executable not in allowed:
+        allowed_text = ", ".join(sorted(allowed)) or "none"
+        raise RuntimeError(
+            f"Execution command for model `{model}` uses executable `{executable}`, which is not allowed. "
+            f"Allowed executable names: {allowed_text}."
+        )
+    return command
+
+
 def _resolve_command(model: str, command_override: list[str] | None = None) -> list[str]:
+    if model not in ENV_KEYS:
+        raise RuntimeError(f"Unsupported execution model `{model}`.")
     if command_override:
         parts: list[str] = []
         for item in command_override:
             parts.extend(shlex.split(str(item), posix=False))
-        return parts
+        return _validate_command(model, parts)
     raw = os.environ.get(ENV_KEYS[model], "").strip()
-    return shlex.split(raw, posix=False) if raw else _default_command(model)
+    if raw:
+        return _validate_command(model, shlex.split(raw, posix=False))
+    return _default_command(model)
 
 
 def _expand_command_template(command: list[str], replacements: dict[str, str]) -> list[str]:
@@ -89,7 +138,15 @@ def execution_status() -> dict[str, Any]:
     for model, env_key in ENV_KEYS.items():
         raw = os.environ.get(env_key, "").strip()
         source = "env"
-        parts = shlex.split(raw, posix=False) if raw else _default_command(model)
+        validation_error = ""
+        if raw:
+            parts = shlex.split(raw, posix=False)
+            try:
+                _validate_command(model, parts)
+            except RuntimeError as error:
+                validation_error = str(error)
+        else:
+            parts = _default_command(model)
         if not raw and parts:
             source = "default"
         elif not parts:
@@ -103,6 +160,8 @@ def execution_status() -> dict[str, Any]:
                 "source": source,
                 "command": parts,
                 "executable_present": shutil.which(executable) is not None if executable else False,
+                "allowed": not validation_error,
+                "validation_error": validation_error,
                 "template_placeholders": [
                     "{system_prompt_path}",
                     "{user_prompt_path}",
