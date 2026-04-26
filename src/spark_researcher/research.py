@@ -7,11 +7,12 @@ from html import unescape
 from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, urlencode, urlparse
-from urllib.request import Request, urlopen
+from urllib.request import Request
 
 from .adapters import adapter_request
 from .memory import record_episode, write_working_memory
 from .paths import advisory_root
+from .safe_url import safe_urlopen
 from .tracing import start_trace
 from .verifier import execute_with_verifier
 
@@ -28,7 +29,7 @@ def _bounded_web_results(query: str, *, limit: int = 5) -> list[dict[str, str]]:
     url = "https://html.duckduckgo.com/html/?" + urlencode({"q": query})
     request = Request(url, headers={"User-Agent": "spark-researcher/0.1"})
     try:
-        page = urlopen(request, timeout=6).read().decode("utf-8", errors="replace")
+        page = safe_urlopen(request, timeout=6).read().decode("utf-8", errors="replace")
     except Exception:
         return []
     links = re.findall(r'<a[^>]*class="[^"]*result__a[^"]*"[^>]*href="([^"]+)"[^>]*>(.*?)</a>', page, flags=re.IGNORECASE | re.DOTALL)

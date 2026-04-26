@@ -6,7 +6,7 @@ from html import unescape
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
-from urllib.request import Request, urlopen
+from urllib.request import Request
 
 from .adapters import execute_advisory
 from .advisory import build_advisory
@@ -15,6 +15,7 @@ from .config import load_config
 from .failures import surprise_status
 from .intent import build_intent_brief
 from .paths import resolve_runtime_root
+from .safe_url import safe_urlopen
 from .tracing import start_trace
 from .trial_queue import merged_candidate_trials
 
@@ -71,7 +72,7 @@ def _web_notes(query: str, *, limit: int = 3) -> list[str]:
     url = "https://html.duckduckgo.com/html/?" + urlencode({"q": query})
     request = Request(url, headers={"User-Agent": "spark-researcher/0.1"})
     try:
-        page = urlopen(request, timeout=6).read().decode("utf-8", errors="replace")
+        page = safe_urlopen(request, timeout=6).read().decode("utf-8", errors="replace")
     except Exception:
         return []
     titles = re.findall(r'result__a[^>]*>(.*?)</a>', page, flags=re.IGNORECASE | re.DOTALL)
