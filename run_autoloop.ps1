@@ -63,7 +63,11 @@ try {
     Write-Host "====================================="
 
     Set-Location $startupChipRoot
-    & python -u -m spark_researcher.cli autoloop --command research --continuous --rounds 6 --suggest-limit 3 --pause-seconds 300
+    $stopFile = Join-Path $startupChipRoot "artifacts\loop\STOP"
+    Write-Host "STOP_FILE: $stopFile"
+    Write-Host "MAX_PASSES: 24"
+    Write-Host "MAX_SECONDS: 21600"
+    & python -u -m spark_researcher.cli autoloop --command research --continuous --rounds 6 --suggest-limit 3 --pause-seconds 300 --max-passes 24 --max-seconds 21600 --stop-file $stopFile
 }
 finally {
     if ($hadOpenAiKey) {

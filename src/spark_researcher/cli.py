@@ -69,6 +69,9 @@ def build_parser() -> argparse.ArgumentParser:
     autoloop_parser.add_argument("--no-apply-suggestions", action="store_true")
     autoloop_parser.add_argument("--continuous", action="store_true")
     autoloop_parser.add_argument("--pause-seconds", type=int, default=60)
+    autoloop_parser.add_argument("--max-passes", type=int)
+    autoloop_parser.add_argument("--max-seconds", type=int)
+    autoloop_parser.add_argument("--stop-file")
 
     candidates_parser = sub.add_parser("candidates")
     candidates_sub = candidates_parser.add_subparsers(dest="candidates_command")
@@ -532,6 +535,9 @@ def main() -> None:
         }
         if args.continuous:
             kwargs["pause_seconds"] = args.pause_seconds
+            kwargs["max_passes"] = args.max_passes
+            kwargs["max_seconds"] = args.max_seconds
+            kwargs["stop_file"] = Path(args.stop_file).resolve() if args.stop_file else None
         print_json(runner(config_path, args.project_command, **kwargs))
         return
     if args.action == "candidates":

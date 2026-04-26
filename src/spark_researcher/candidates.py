@@ -27,6 +27,14 @@ def _continuous_status_path(runtime_root: Path) -> Path:
     return runtime_root / "artifacts" / "loop" / "continuous_status.json"
 
 
+def _continuous_stop_path(runtime_root: Path) -> Path:
+    return runtime_root / "artifacts" / "loop" / "STOP"
+
+
+def _continuous_stop_requested(path: Path | None) -> bool:
+    return path is not None and path.exists()
+
+
 def _tracked_loop_artifacts(runtime_root: Path) -> dict[str, float]:
     tracked = [
         runtime_root / "artifacts" / "research" / "refresh.json",
@@ -729,14 +737,50 @@ def run_continuous_autoloop(
     rounds: int = 2,
     suggest_limit: int = 2,
     pause_seconds: int = 60,
+    max_passes: int | None = None,
+    max_seconds: int | None = None,
+    stop_file: Path | None = None,
     dry_run: bool = False,
     apply_suggestions: bool = True,
 ) -> dict[str, Any]:
     passes: list[dict[str, Any]] = []
     runtime_root = resolve_runtime_root(config_path)
+    stop_path = stop_file or _continuous_stop_path(runtime_root)
+    loop_started = time.monotonic()
     _mark_stale_continuous_status(runtime_root)
     try:
         while True:
+            elapsed_seconds = time.monotonic() - loop_started
+            if _continuous_stop_requested(stop_path):
+                return {
+                    "command_name": command_name,
+                    "project_name": load_config(config_path).project_name,
+                    "continuous": True,
+                    "pass_count": len(passes),
+                    "passes": passes,
+                    "stopped": "stop_file",
+                    "stop_file": str(stop_path),
+                }
+            if max_passes is not None and max_passes > 0 and len(passes) >= max_passes:
+                return {
+                    "command_name": command_name,
+                    "project_name": load_config(config_path).project_name,
+                    "continuous": True,
+                    "pass_count": len(passes),
+                    "passes": passes,
+                    "stopped": "max_passes",
+                    "max_passes": max_passes,
+                }
+            if max_seconds is not None and max_seconds > 0 and elapsed_seconds >= max_seconds:
+                return {
+                    "command_name": command_name,
+                    "project_name": load_config(config_path).project_name,
+                    "continuous": True,
+                    "pass_count": len(passes),
+                    "passes": passes,
+                    "stopped": "max_seconds",
+                    "max_seconds": max_seconds,
+                }
             pass_index = len(passes) + 1
             pass_started_at = _now_iso()
             writer_pid = os.getpid()
@@ -751,6 +795,9 @@ def run_continuous_autoloop(
                     "continuous": True,
                     "writer_pid": writer_pid,
                     "pass_count": len(passes),
+                    "max_passes": max_passes,
+                    "max_seconds": max_seconds,
+                    "stop_file": str(stop_path),
                     "current_pass": {
                         "pass": pass_index,
                         "pass_started_at": pass_started_at,
@@ -841,10 +888,43 @@ def run_continuous_autoloop(
                     "continuous": True,
                     "writer_pid": writer_pid,
                     "pass_count": len(passes),
+                    "max_passes": max_passes,
+                    "max_seconds": max_seconds,
+                    "stop_file": str(stop_path),
                     "current_pass": pass_summary,
                     "recent_passes": passes[-5:],
                 },
             )
+            if _continuous_stop_requested(stop_path):
+                return {
+                    "command_name": command_name,
+                    "project_name": load_config(config_path).project_name,
+                    "continuous": True,
+                    "pass_count": len(passes),
+                    "passes": passes,
+                    "stopped": "stop_file",
+                    "stop_file": str(stop_path),
+                }
+            if max_passes is not None and max_passes > 0 and len(passes) >= max_passes:
+                return {
+                    "command_name": command_name,
+                    "project_name": load_config(config_path).project_name,
+                    "continuous": True,
+                    "pass_count": len(passes),
+                    "passes": passes,
+                    "stopped": "max_passes",
+                    "max_passes": max_passes,
+                }
+            if max_seconds is not None and max_seconds > 0 and (time.monotonic() - loop_started) >= max_seconds:
+                return {
+                    "command_name": command_name,
+                    "project_name": load_config(config_path).project_name,
+                    "continuous": True,
+                    "pass_count": len(passes),
+                    "passes": passes,
+                    "stopped": "max_seconds",
+                    "max_seconds": max_seconds,
+                }
             time.sleep(next_sleep_seconds)
     except KeyboardInterrupt:
         return {
