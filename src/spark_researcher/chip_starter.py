@@ -30,7 +30,16 @@ def _desktop_root() -> Path:
 
 
 def _spark_repo_root() -> Path:
-    return Path(__file__).resolve().parents[2]
+    cwd = Path.cwd().resolve()
+    for candidate in (cwd, *cwd.parents):
+        if _looks_like_spark_researcher_repo(candidate):
+            return candidate
+    source_root = Path(__file__).resolve().parents[2]
+    return source_root
+
+
+def _looks_like_spark_researcher_repo(path: Path) -> bool:
+    return (path / "pyproject.toml").exists() and (path / "src" / "spark_researcher").is_dir()
 
 
 def _next_steps(chip_root: Path) -> list[str]:
