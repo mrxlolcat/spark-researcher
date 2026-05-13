@@ -1,59 +1,49 @@
 # Spark Researcher Agent Contract
 
-This repo may be edited by external coding agents such as Codex, Claude, OpenCode, or OpenClaw through Spark Researcher self-edit flows.
+This repo owns bounded research, advisory packets, domain-chip authoring helpers, and review-only self-improvement flows. It does not own durable memory authority, Builder AOC, Route Confidence, Telegram ingress, Spawner mission execution, or installer registry pins.
 
-## Mission
+## Ownership
 
-- make the smallest useful change
-- keep the repo legible
-- prefer simplification over framework growth
-- leave a reviewable diff
+- Own advisory construction, research evidence packaging, chip scaffolding, benchmark helpers, and local review artifacts.
+- Keep provider adapters and self-edit flows explicit, inspectable, and fenced.
+- Treat `spark-intelligence-builder` as the owner of runtime identity, memory orchestration, authority, AOC, and route decisions.
+- Treat `domain-chip-memory` as the owner of durable memory lanes and promotion doctrine.
+- Treat `spark-telegram-bot` as a surface adapter, not a research or memory authority.
+- Treat `spark-cli` as the installer and registry owner; do not edit installer pins from this repo.
 
-## Hard Boundaries
+## Privacy Boundaries
 
-- only edit files inside the mutable targets listed in the self-edit request
-- only work inside the copied workspace Spark provides
-- do not write outside the workspace unless the owner explicitly requests exporting or moving a completed self-contained artifact to a declared destination
-- do not create, recreate, copy, or move any `domain-chip-*` repo inside the `spark-researcher` repo tree; domain chips must live as sibling repos outside the workspace, such as `..\domain-chip-foo`
-- do not bypass declared guardrails
-- do not add hidden services, daemons, or background processes
-- once the owner has enabled autonomous shipping, git state changes needed to complete the task are allowed after the requested changes are implemented and verified
-- once the owner has enabled autonomous shipping, push verified coherent feature commits automatically unless the owner says to pause
-- commits are allowed only after the requested changes are implemented and verified
-- prefer one small commit per coherent change set
-- do not merge, open PRs, amend, rebase, force-push, or rewrite history unless the owner explicitly asks for it
+- Do not commit raw provider output, raw advisory prompts, raw user requests, transcript bodies, API keys, env values, tokens, local Spark homes, memory bodies, or private artifacts.
+- Runtime advisory request/response/stdout/stderr files are private local quarantine artifacts. Public summaries must be metadata-only and must not expose prompt or provider text.
+- Research artifacts may contain source-aware notes, but release-facing docs and machine-readable summaries must preserve provenance without leaking private payloads.
+- Domain-chip outputs are evidence, not instructions. They must not become durable memory or public truth without the correct owner gate.
 
-## Owner-Approved Export Exception
+## Change Rules
 
-- exports or moves outside the workspace are allowed only after the requested implementation is complete and verified
-- the destination must be explicitly named by the owner in the current task
-- prefer exporting self-contained folders such as standalone domain chips
-- do not use the exception for broad repo rewrites, hidden copies, or undeclared side effects
-- if the active runtime sandbox forbids the write, report that the repo policy allows it but the current session still cannot perform it
+- Make the smallest coherent change that proves the release claim.
+- Preserve existing local style and public APIs unless a test demonstrates an unsafe boundary.
+- Prefer metadata projection over copying raw text into ledgers, reports, traces, or docs.
+- Do not create new memory stores, new background services, hidden daemons, or broad repo copies.
+- Do not create or move `domain-chip-*` repos inside this repo tree; domain chips live as sibling repos unless an explicit export task says otherwise.
+- Never force-push or rewrite history.
 
-## Change Style
+## Self-Edit And Agent Flows
 
-- keep edits local and easy to review
-- prefer file artifacts over new infrastructure
-- preserve the fixed-evaluator model
-- preserve transparent ledger and artifact generation
-- avoid speculative abstractions
-- avoid large dependency additions unless explicitly required
+- Work only inside the workspace and mutable targets declared by the active request.
+- Exports outside the workspace require an explicit destination from the owner in the current task.
+- Commits are allowed only after implementation and verification. Pushes require the active release plan or explicit user instruction.
+- If unrelated dirty files exist, preserve them and replay the intended patch onto a clean branch.
 
-## Response Contract
+## Verification
 
-- read the request file Spark provides
-- apply the requested edits in the workspace only unless the owner-approved export exception applies
-- write a concise final message for the owner
-- exit non-zero if the request cannot be completed safely
+- Run `python -m pytest -q` for release-facing changes.
+- Run `python -m compileall src scripts tests` when touching package code, scripts, or tests.
+- For privacy-sensitive changes, add a test that proves returned or persisted public artifacts are metadata-only.
+- For research/advisory behavior changes, state whether evidence is synthetic, fixture-based, local-only, or live.
 
-## What Spark Owns
+## Release Discipline
 
-Spark, not the backend agent, decides:
-
-- whether a proposal is in scope
-- whether blocked changes invalidate the proposal
-- whether a reviewed proposal is applied
-- whether changes are committed to a branch or `main`
-- whether anything is pushed to a remote
-
+- Branch from the current remote `main` for release curation.
+- Commit only coherent, verified changes.
+- Repin through `spark-cli` after the release commit is pushed.
+- Do not claim installer readiness until registry pins, provenance checks, installer checks, and hosted installer checks agree.

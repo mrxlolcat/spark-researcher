@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 from types import ModuleType
 
@@ -55,3 +56,41 @@ def test_maps_advisory_to_spark_codez_researcher_response() -> None:
     assert response["memoryRefs"] == ["artifacts/memory/documents/packet-one.md"]
     assert response["followupActions"] == ["Keep claims bounded."]
     assert "epistemic_status=grounded" in response["evidenceSummary"]
+
+
+def test_bridge_artifacts_persist_metadata_only(tmp_path: Path) -> None:
+    bridge = load_bridge()
+    request = {
+        "runtimeRoot": str(tmp_path),
+        "requestId": "req:secret",
+        "traceId": "trace:input",
+        "userMessage": "private launch question with raw context",
+        "activeDomainChips": ["domain-chip-startup-yc"],
+    }
+    response = {
+        "requestId": "req:secret",
+        "replyText": "private advisory reply",
+        "evidenceSummary": ["private evidence detail"],
+        "packetRefs": ["packet:one"],
+        "memoryRefs": ["artifacts/memory/documents/private.md"],
+        "followupActions": ["private followup"],
+        "traceRef": "trace:researcher",
+        "escalationHint": "none",
+    }
+
+    bridge._write_bridge_artifacts(request, response)
+
+    root = tmp_path / "artifacts" / "advisory" / "bridge-requests"
+    request_payload = json.loads(next(root.glob("*.request.json")).read_text(encoding="utf-8"))
+    response_payload = json.loads(next(root.glob("*.response.json")).read_text(encoding="utf-8"))
+    combined = json.dumps({"request": request_payload, "response": response_payload}, sort_keys=True)
+
+    assert "metadata only" in request_payload["redaction"]
+    assert request_payload["hasUserMessage"] is True
+    assert request_payload["userMessageLength"] == len(request["userMessage"])
+    assert response_payload["replyTextLength"] == len(response["replyText"])
+    assert response_payload["evidenceSummaryCount"] == 1
+    assert "private launch question" not in combined
+    assert "private advisory reply" not in combined
+    assert "private evidence detail" not in combined
+    assert "private followup" not in combined

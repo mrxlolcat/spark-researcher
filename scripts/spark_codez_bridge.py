@@ -175,8 +175,43 @@ def _write_bridge_artifacts(request: dict[str, Any], response: dict[str, Any]) -
     root = runtime_root / "artifacts" / "advisory" / "bridge-requests"
     root.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(UTC).strftime("%Y%m%d-%H%M%S-%f")
-    (root / f"{stamp}.request.json").write_text(json.dumps(request, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    (root / f"{stamp}.response.json").write_text(json.dumps(response, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    request_meta = _request_artifact_metadata(request)
+    response_meta = _response_artifact_metadata(response)
+    (root / f"{stamp}.request.json").write_text(json.dumps(request_meta, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (root / f"{stamp}.response.json").write_text(json.dumps(response_meta, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _request_artifact_metadata(request: dict[str, Any]) -> dict[str, Any]:
+    chips = request.get("activeDomainChips") if isinstance(request.get("activeDomainChips"), list) else []
+    return {
+        "schema_version": "spark.researcher.bridge_request_artifact.v1",
+        "redaction": "metadata only; userMessage, prompt text, env values, and private payload bodies omitted",
+        "requestId": str(request.get("requestId") or ""),
+        "traceId": str(request.get("traceId") or ""),
+        "hasUserMessage": bool(str(request.get("userMessage") or "").strip()),
+        "userMessageLength": len(str(request.get("userMessage") or "")),
+        "activeSpecializationPath": str(request.get("activeSpecializationPath") or ""),
+        "activeDomainChipCount": len(chips),
+        "runtimeRootConfigured": bool(str(request.get("runtimeRoot") or "").strip()),
+        "configPathConfigured": bool(str(request.get("configPath") or "").strip()),
+        "requestKeys": sorted(str(key) for key in request.keys()),
+    }
+
+
+def _response_artifact_metadata(response: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "schema_version": "spark.researcher.bridge_response_artifact.v1",
+        "redaction": "metadata only; reply text, evidence text, memory bodies, and private payload bodies omitted",
+        "requestId": str(response.get("requestId") or ""),
+        "traceRef": str(response.get("traceRef") or ""),
+        "replyTextLength": len(str(response.get("replyText") or "")),
+        "evidenceSummaryCount": len(response.get("evidenceSummary") or []) if isinstance(response.get("evidenceSummary"), list) else 0,
+        "packetRefCount": len(response.get("packetRefs") or []) if isinstance(response.get("packetRefs"), list) else 0,
+        "memoryRefCount": len(response.get("memoryRefs") or []) if isinstance(response.get("memoryRefs"), list) else 0,
+        "followupActionCount": len(response.get("followupActions") or []) if isinstance(response.get("followupActions"), list) else 0,
+        "escalationHint": str(response.get("escalationHint") or "none"),
+        "responseKeys": sorted(str(key) for key in response.keys()),
+    }
 
 
 def _dict(value: Any) -> dict[str, Any]:
