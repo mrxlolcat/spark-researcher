@@ -402,7 +402,7 @@ def invoke_chip_hook(
 ) -> dict[str, Any]:
     context = load_chip_context(config_path, config)
     if context is None:
-        raise RuntimeError("No chip configured for this project.")
+        raise RuntimeError("No chip configured for this project. Set `chip.path` (and optionally `chip.manifest`) in spark-researcher.json to point at a chip directory containing a manifest.")
     commands = context.manifest.get("commands", {})
     if not isinstance(commands, dict) or hook not in commands:
         raise RuntimeError(f"Chip hook `{hook}` is not defined in {context.manifest_path}.")
