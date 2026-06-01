@@ -4,7 +4,10 @@ import json
 from pathlib import Path
 
 from spark_researcher import candidates, runner
+from spark_researcher.config import load_config
+from spark_researcher.outcomes import load_advisory_outcomes
 from spark_researcher.paths import ledger_path
+from spark_researcher.tracing import start_trace, trace_status
 
 
 def _write_ledger(runtime_root: Path, rows: list[dict]) -> None:
@@ -85,3 +88,81 @@ def test_failed_and_unknown_rows_count_as_discards() -> None:
     assert candidates._row_counts_as_discard({"status": "ok", "verdict": "unknown"}) is True
     assert candidates._row_counts_as_discard({"status": "ok", "verdict": "regressed"}) is True
     assert candidates._row_counts_as_discard({"status": "ok", "verdict": "improved"}) is False
+
+
+def test_advisory_outcomes_skip_malformed_jsonl_rows(tmp_path: Path) -> None:
+    path = tmp_path / "artifacts" / "advisory" / "outcomes.jsonl"
+    path.parent.mkdir(parents=True)
+    path.write_text(
+        "\n".join(
+            [
+                json.dumps({"status": "ok", "packet_ids": ["packet-a"]}),
+                "{not-json",
+                json.dumps(["not", "an", "object"]),
+                json.dumps({"status": "fail", "packet_ids": ["packet-b"]}),
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    rows = load_advisory_outcomes(tmp_path)
+
+    assert [row["status"] for row in rows] == ["ok", "fail"]
+
+
+def test_trace_status_skips_malformed_jsonl_rows(tmp_path: Path) -> None:
+    recorder = start_trace(tmp_path, kind="advisory_research", name="retry")
+    recorder.event("citation_check", attributes={"used_note_ids": ["a"], "relevant_note_ids": ["b"]})
+    recorder.finish()
+    index_path = tmp_path / "artifacts" / "traces" / "index.jsonl"
+    trace_path = recorder.path
+    index_path.write_text(index_path.read_text(encoding="utf-8") + "{not-json\n", encoding="utf-8")
+    trace_path.write_text(trace_path.read_text(encoding="utf-8") + "{not-json\n", encoding="utf-8")
+
+    status = trace_status(tmp_path)
+
+    assert status["trace_count"] == 1
+    assert status["research_signals"]["research_retry_count"] == 1
+    assert status["research_signals"]["citation_check_count"] == 1
+    assert status["research_signals"]["citation_mismatch_count"] == 1
+
+
+def test_load_config_falls_back_for_invalid_optional_numeric_values(tmp_path: Path) -> None:
+    config_path = tmp_path / "spark-researcher.project.json"
+    config_path.write_text(
+        json.dumps(
+            {
+                "project_name": "demo",
+                "eval_metric": "score",
+                "commands": {"research": {"args": ["python", "-c", "print('ok')"]}},
+                "metrics": {"score": {"pattern": "score=(?P<value>\\d+)"}},
+                "trainers": [
+                    {
+                        "name": "writer",
+                        "examples_path": "examples.jsonl",
+                        "compile_command": ["python", "compile.py"],
+                        "min_examples": "many",
+                        "recompile_every": None,
+                        "max_examples": "all",
+                    }
+                ],
+                "guardrails": {
+                    "max_loop_iterations": "forever",
+                    "consecutive_discard_limit": None,
+                    "near_best_tolerance": "close",
+                },
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    config = load_config(config_path)
+
+    assert config.trainers[0].min_examples == 20
+    assert config.trainers[0].recompile_every == 10
+    assert config.trainers[0].max_examples == 96
+    assert config.guardrails.max_loop_iterations == 8
+    assert config.guardrails.consecutive_discard_limit == 3
+    assert config.guardrails.near_best_tolerance == 0.03
