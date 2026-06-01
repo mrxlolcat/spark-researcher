@@ -20,24 +20,22 @@ def test_normalize_chip_name_preserves_existing_prefix() -> None:
     assert chip_starter.normalize_chip_name("marketing", "domain-chip-marketing") == "domain-chip-marketing"
 
 
-def test_resolve_chip_target_defaults_to_desktop(monkeypatch, tmp_path: Path) -> None:
-    desktop = tmp_path / "Desktop"
-    desktop.mkdir()
-    monkeypatch.setattr(chip_starter, "_desktop_root", lambda: desktop)
+def test_resolve_chip_target_defaults_to_spark_chip_parent(monkeypatch, tmp_path: Path) -> None:
+    chip_parent = tmp_path / ".spark" / "chips"
+    monkeypatch.setattr(chip_starter, "_default_chip_parent", lambda: chip_parent)
 
     target = chip_starter.resolve_chip_target(None, "domain-chip-marketing")
 
-    assert target == (desktop / "domain-chip-marketing").resolve()
+    assert target == (chip_parent / "domain-chip-marketing").resolve()
 
 
-def test_resolve_chip_target_puts_relative_paths_under_desktop(monkeypatch, tmp_path: Path) -> None:
-    desktop = tmp_path / "Desktop"
-    desktop.mkdir()
-    monkeypatch.setattr(chip_starter, "_desktop_root", lambda: desktop)
+def test_resolve_chip_target_puts_relative_paths_under_spark_chip_parent(monkeypatch, tmp_path: Path) -> None:
+    chip_parent = tmp_path / ".spark" / "chips"
+    monkeypatch.setattr(chip_starter, "_default_chip_parent", lambda: chip_parent)
 
     target = chip_starter.resolve_chip_target(Path("marketing-explicit"), "domain-chip-marketing")
 
-    assert target == (desktop / "marketing-explicit").resolve()
+    assert target == (chip_parent / "marketing-explicit").resolve()
 
 
 def test_init_chip_writes_readme_with_resolved_root(tmp_path: Path) -> None:
