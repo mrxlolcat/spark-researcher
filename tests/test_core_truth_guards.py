@@ -75,6 +75,11 @@ def test_candidate_primitive_selection_ignores_failed_rows() -> None:
     }
 
 
+def test_candidate_ids_do_not_collapse_decimal_values() -> None:
+    assert candidates._candidate_id({"learning_rate": "1.5"}) != candidates._candidate_id({"learning_rate": "15"})
+    assert candidates._candidate_id({"learning_rate": "1.5"}) != candidates._candidate_id({"learning_rate": "1_dot_5"})
+
+
 def test_failed_and_unknown_rows_count_as_discards() -> None:
     assert runner.row_counts_as_discard({"status": "failed", "verdict": "baseline"}) is True
     assert runner.row_counts_as_discard({"status": "ok", "verdict": "unknown"}) is True
