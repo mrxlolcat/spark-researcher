@@ -24,9 +24,8 @@ def normalize_chip_name(domain: str, chip_name: str | None = None) -> str:
     return candidate
 
 
-def _desktop_root() -> Path:
-    desktop = Path.home() / "Desktop"
-    return desktop if desktop.exists() else Path.home()
+def _default_chip_parent() -> Path:
+    return Path.home() / ".spark" / "chips"
 
 
 def _spark_repo_root() -> Path:
@@ -55,11 +54,11 @@ def _next_steps(chip_root: Path) -> list[str]:
 
 def resolve_chip_target(target_dir: Path | None, chip_name: str) -> Path:
     if target_dir is None:
-        return (_desktop_root() / chip_name).resolve()
+        return (_default_chip_parent() / chip_name).resolve()
     candidate = target_dir.expanduser()
     if candidate.is_absolute():
         return candidate.resolve()
-    return (_desktop_root() / candidate).resolve()
+    return (_default_chip_parent() / candidate).resolve()
 
 
 def ensure_external_chip_target(target_dir: Path) -> Path:
