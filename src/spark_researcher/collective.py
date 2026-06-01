@@ -14,6 +14,9 @@ from .paths import capsule_root, ledger_path
 from .paths import spark_swarm_collective_payload_path
 
 
+COLLECTIVE_COMMAND_TIMEOUT_SECONDS = 120
+
+
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
     if not path.exists():
         return []
@@ -1021,6 +1024,7 @@ def sync_local_collective(repo_root: Path, runtime_root: Path, *, label: str | N
                 encoding="utf-8",
                 errors="replace",
                 check=False,
+                timeout=COLLECTIVE_COMMAND_TIMEOUT_SECONDS,
             )
             commands_run.append(
                 {
@@ -1061,6 +1065,7 @@ def _run_command(
             capture_output=True,
             text=True,
             encoding="utf-8",
+            timeout=COLLECTIVE_COMMAND_TIMEOUT_SECONDS,
         )
     except subprocess.CalledProcessError as error:
         detail = (error.stderr or error.stdout or "").strip()
