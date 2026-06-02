@@ -14,10 +14,23 @@ from .paths import capsule_root, ledger_path
 from .paths import spark_swarm_collective_payload_path
 
 
+COLLECTIVE_COMMAND_TIMEOUT_SECONDS = 120
+
+
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
     if not path.exists():
         return []
-    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    rows: list[dict[str, Any]] = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        try:
+            parsed = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(parsed, dict):
+            rows.append(parsed)
+    return rows
 
 
 def now_stamp() -> str:
@@ -38,13 +51,15 @@ def _parse_frontmatter(raw: str) -> dict[str, Any]:
     lines = raw.splitlines()
     if not lines or lines[0].strip() != "---":
         return {}
-    payload: dict[str, str] = {}
+    payload: dict[str, Any] = {}
     current_key: str | None = None
     for line in lines[1:]:
         if line.strip() == "---":
             break
         if line.startswith("  - ") and current_key is not None:
-            payload.setdefault(current_key, [])
+            existing = payload.get(current_key)
+            if not isinstance(existing, list):
+                payload[current_key] = [] if existing is None else [existing]
             payload[current_key].append(line[4:].strip())
             continue
         if ":" not in line:
