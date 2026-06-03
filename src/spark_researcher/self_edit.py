@@ -370,6 +370,30 @@ def propose(
     return proposal
 
 
+def proposal_public_summary(proposal: dict[str, Any]) -> dict[str, Any]:
+    blocked_changes = proposal.get("blocked_changes", [])
+    blocked_count = len(blocked_changes) if isinstance(blocked_changes, list) else 0
+    return {
+        key: proposal[key]
+        for key in (
+            "proposal_id",
+            "created_at",
+            "status",
+            "request_path",
+            "workspace_root",
+            "stdout_path",
+            "stderr_path",
+            "last_message_path",
+            "backend_profile",
+            "trace_id",
+            "trace_path",
+            "mutable_targets",
+            "change_count",
+        )
+        if key in proposal
+    } | {"blocked_change_count": blocked_count}
+
+
 def review_proposal(
     config_path: Path,
     proposal_id: str,
