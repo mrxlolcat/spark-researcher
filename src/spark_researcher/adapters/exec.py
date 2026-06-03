@@ -158,7 +158,8 @@ def execution_status() -> dict[str, Any]:
                 "env_key": env_key,
                 "configured": bool(parts),
                 "source": source,
-                "command": parts,
+                "executable": _executable_name(executable) if executable else "",
+                "arg_count": max(len(parts) - 1, 0),
                 "executable_present": shutil.which(executable) is not None if executable else False,
                 "allowed": not validation_error,
                 "validation_error": validation_error,
@@ -171,6 +172,27 @@ def execution_status() -> dict[str, Any]:
             }
         )
     return {"providers": rows}
+
+
+def execution_public_summary(result: dict[str, Any]) -> dict[str, Any]:
+    response = result.get("response")
+    return {
+        key: result[key]
+        for key in (
+            "model",
+            "dry_run",
+            "returncode",
+            "request_path",
+            "system_prompt_path",
+            "user_prompt_path",
+            "response_path",
+            "stdout_path",
+            "stderr_path",
+            "trace_id",
+            "trace_path",
+        )
+        if key in result
+    } | {"has_response": bool(response)}
 
 
 def execute_advisory(

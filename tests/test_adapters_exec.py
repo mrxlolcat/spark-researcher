@@ -7,7 +7,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from spark_researcher.adapters.base import adapter_request
-from spark_researcher.adapters.exec import _default_command, _expand_command_template, _resolve_command, execute_advisory, execution_status
+from spark_researcher.adapters.exec import _default_command, _expand_command_template, _resolve_command, execute_advisory, execution_public_summary, execution_status
 
 
 class AdapterExecTests(unittest.TestCase):
@@ -58,6 +58,41 @@ class AdapterExecTests(unittest.TestCase):
         with patch.dict(os.environ, env, clear=False):
             command = _resolve_command("generic")
         self.assertEqual(command[:2], ["runner", "--input"])
+
+    def test_execution_status_redacts_configured_command_arguments(self) -> None:
+        env = {"SPARK_RESEARCHER_ADAPTER_CODEX_COMMAND": "codex --token SECRET_VALUE --json-out {response_path}"}
+        with patch.dict(os.environ, env, clear=False):
+            status = execution_status()
+
+        encoded = repr(status)
+        codex = next(item for item in status["providers"] if item["model"] == "codex")
+        self.assertNotIn("SECRET_VALUE", encoded)
+        self.assertNotIn("command", codex)
+        self.assertEqual(codex["executable"], "codex")
+        self.assertEqual(codex["arg_count"], 4)
+
+    def test_execution_public_summary_omits_provider_response_text(self) -> None:
+        result = {
+            "model": "codex",
+            "returncode": 0,
+            "request_path": "/private/request.json",
+            "response_path": "/private/response.json",
+            "stdout_path": "/private/stdout.log",
+            "stderr_path": "/private/stderr.log",
+            "trace_id": "trace-1",
+            "trace_path": "/private/trace.jsonl",
+            "response": {"raw_response": "SECRET_PROVIDER_SENTINEL"},
+            "command": ["codex", "--token", "SECRET_COMMAND_SENTINEL"],
+        }
+
+        summary = execution_public_summary(result)
+        encoded = repr(summary)
+        self.assertTrue(summary["has_response"])
+        self.assertEqual(summary["response_path"], "/private/response.json")
+        self.assertNotIn("response", summary)
+        self.assertNotIn("command", summary)
+        self.assertNotIn("SECRET_PROVIDER_SENTINEL", encoded)
+        self.assertNotIn("SECRET_COMMAND_SENTINEL", encoded)
 
     def test_execution_status_marks_default_codex_source(self) -> None:
         with patch.dict(os.environ, {}, clear=True):
