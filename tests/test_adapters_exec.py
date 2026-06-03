@@ -75,12 +75,15 @@ class AdapterExecTests(unittest.TestCase):
         result = {
             "model": "codex",
             "returncode": 0,
-            "request_path": "/private/request.json",
-            "response_path": "/private/response.json",
-            "stdout_path": "/private/stdout.log",
-            "stderr_path": "/private/stderr.log",
+            "status": "ok",
+            "decision": "approve",
+            "request_path": "/SECRET_HOME/private/request.json",
+            "response_path": "/SECRET_HOME/private/response.json",
+            "stdout_path": "/SECRET_HOME/private/stdout.log",
+            "stderr_path": "/SECRET_HOME/private/stderr.log",
             "trace_id": "trace-1",
-            "trace_path": "/private/trace.jsonl",
+            "trace_path": "/SECRET_HOME/private/trace.jsonl",
+            "citations": [{"title": "source"}],
             "response": {"raw_response": "SECRET_PROVIDER_SENTINEL"},
             "command": ["codex", "--token", "SECRET_COMMAND_SENTINEL"],
         }
@@ -88,11 +91,15 @@ class AdapterExecTests(unittest.TestCase):
         summary = execution_public_summary(result)
         encoded = repr(summary)
         self.assertTrue(summary["has_response"])
-        self.assertEqual(summary["response_path"], "/private/response.json")
-        self.assertNotIn("response", summary)
+        self.assertEqual(summary["status"], "ok")
+        self.assertEqual(summary["decision"], "approve")
+        self.assertEqual(summary["citation_count"], 1)
+        self.assertEqual(summary["artifacts"]["response"], {"present": True, "name": "response.json"})
+        self.assertNotIn("response", {key: value for key, value in summary.items() if key != "artifacts"})
         self.assertNotIn("command", summary)
         self.assertNotIn("SECRET_PROVIDER_SENTINEL", encoded)
         self.assertNotIn("SECRET_COMMAND_SENTINEL", encoded)
+        self.assertNotIn("SECRET_HOME", encoded)
 
     def test_execution_status_marks_default_codex_source(self) -> None:
         with patch.dict(os.environ, {}, clear=True):

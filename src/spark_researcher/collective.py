@@ -494,7 +494,8 @@ def _runtime_blocker(record: dict[str, Any]) -> str | None:
     status = str(record.get("status") or "").strip()
     verdict = str(record.get("verdict") or "").strip()
     if status and status != "ok":
-        return f"Run failed with returncode {record.get('returncode')}."
+        returncode = record.get("returncode")
+        return f"Run failed with returncode {returncode}." if returncode is not None else "Run failed."
     if verdict and verdict not in {"improved", "flat", "baseline", "near_best"}:
         return f"Run verdict: {verdict}."
     return None
